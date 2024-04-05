@@ -35,6 +35,18 @@ const CustomerSchema = mongoose.Schema({
   token: String,
   refreshToken: String,
 }, { versionKey: false });
+const CustomerCartHistorySchema = mongoose.Schema({
+  _id: mongoose.Schema.Types.ObjectId,
+  user: CustomerSchema,
+  item: Array,
+  CreatedAt: Number,
+}, { versionKey: false });
+const CustomerProductHistorySchema = mongoose.Schema({
+  _id: mongoose.Schema.Types.ObjectId,
+  user: CustomerSchema,
+  item: Array,
+  CreatedAt: Number,
+}, { versionKey: false });
 const BrandSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   name: String,
@@ -122,6 +134,8 @@ const Models = {
   SubCategory: mongoose.models.SubCategory || mongoose.model('SubCategory', SubCategorySchema),
   Shipping: mongoose.models.Shipping || mongoose.model('Shipping', Shippingchema),
   DescProduct: mongoose.models.DescProduct || mongoose.model('DescProduct', DescProductSchema),
+  CustomerProductHistory: mongoose.models.DescProduct || mongoose.model('CustomerProductHistory', CustomerProductHistorySchema),
+  CustomerCartHistory: mongoose.models.DescProduct || mongoose.model('CustomerCartHistory', CustomerCartHistorySchema),
 };
 
 module.exports = Models;

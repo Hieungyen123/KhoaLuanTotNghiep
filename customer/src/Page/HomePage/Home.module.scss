@@ -4,6 +4,7 @@
   // display: flex;
   // align-items: center;
   // justify-content: center;
+
   .Main-Menu {
     margin-right: -32px;
     margin-left: -32px;
@@ -17,6 +18,7 @@
 
     display: flex;
     justify-content: center;
+
     gap: 10px;
     // border-radius: 5px;
     .Slide {
@@ -65,17 +67,23 @@
   }
   .Brand-Slide {
     margin: 50px 0;
+    background-color: white;
 
     width: 100%;
     display: flex;
     justify-content: center;
     flex-direction: column;
     gap: 10px;
+    min-height: 350px;
     .Brand-Slide-title {
+      padding: 10px;
       display: flex;
       align-items: center;
       // justify-content: center;
       gap: 10px;
+      background-image: url(../../IMG/backgroundblue.webp);
+      width: 100%;
+      padding: 10px;
       h3 {
         color: var(--MainColor);
       }
@@ -88,6 +96,7 @@
       }
     }
     .Slide {
+      padding: 20px;
       width: 100%;
       .Slide-item {
         z-index: 100;
@@ -125,15 +134,38 @@
   }
   .Product {
     margin: 50px 0;
-    background-color: rgb(244, 245, 248);
-    padding: 20px;
+    width: 100%;
+
+    // background-color: rgb(244, 245, 248);
+    // padding: 20px;
     display: flex;
     align-items: center;
+    flex-direction: column;
+
     .Suggest-Product {
-      margin: 20px 0;
+      width: 100%;
+      // margin: 20px 0;
+      min-height: 500px;
+    }
+    .Title-Product {
+      // background-color: rgb(244, 245, 248);
+      background-image: url(../../IMG/backgroundblue.webp);
+      padding: 10px;
+
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      // margin: 20px 0;
+      color: var(--MainColor);
+      .icon {
+      }
     }
     .List-Product {
-      margin: 10px 0;
+      background-color: white;
+      padding: 30px 10px;
+
+      // margin: 10px 0;
       width: 100%;
       display: flex;
 

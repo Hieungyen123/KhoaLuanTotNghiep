@@ -17,8 +17,13 @@ import UseFetch from '../../hook/useFetch';
 
 import Menu from '../../components/Menu/Menu'
 
+import CircularProgress from '@mui/material/CircularProgress';
 import AutoAwesomeOutlinedIcon from '@mui/icons-material/AutoAwesomeOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined';
+import { Modal } from '@mui/material';
+
+
 import MyContext from '../../contexts/MyContext';
 import axios from 'axios';
 
@@ -38,6 +43,7 @@ const Home = () => {
 
     const [brand, setBrand] = useState([])
     const [products, setProducts] = useState([])
+    const [open, setOpen] = useState(true)
 
 
     const settingsBrand = {
@@ -83,7 +89,7 @@ const Home = () => {
         ]
     };
     const settings = {
-        lazyLoad: true,
+        // lazyLoad: true,
         dots: true,
         autoplay: true,
         autoplaySpeed: 3000,
@@ -111,9 +117,17 @@ const Home = () => {
         })
     }
     useEffect(() => {
-        FetchProducts()
-        UseFetchBrand();
-    }, [])
+        try {
+            FetchProducts()
+            UseFetchBrand();
+            if (brand.length > 0 && products.length > 0) {
+                setOpen(false)
+            }
+        } catch {
+
+        }
+
+    }, [products, brand, open])
 
     // console.log(products)
     return (
@@ -121,7 +135,16 @@ const Home = () => {
             {/* <section className={cx("Main-Menu")}>
                 <Menu />
             </section> */}
-
+            <Modal
+                open={open}
+                // onClose={() => setOpen(false)}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <div className='modal-content-loading'>
+                    < CircularProgress />
+                </div>
+            </Modal>
             <section className={cx("Main-Banner")}>
                 <div className={cx("Slide")}>
                     <Slider {...settings} style={{ borderRadius: '5px' }}>
@@ -182,7 +205,11 @@ const Home = () => {
 
             <section className={cx("Product")} >
                 <div className={cx("Suggest-Product")}>
-                    <div className={cx("Title-Product")}>Gợi ý hôm nay</div>
+                    <div className={cx("Title-Product")}>
+                        <Inventory2OutlinedIcon className={cx("icon")} />
+                        <h3>Gợi ý hôm nay</h3>
+
+                    </div>
                     <div className={cx("List-Product")}>
                         <div className={cx("List-Product-center")}>
                             {products.map(product => {
@@ -195,7 +222,7 @@ const Home = () => {
                     <div className={cx("Title-Product")}></div>
                     <div className={cx("List-Product")}></div>
                 </div>
-            </section>
+            </section >
 
 
 
@@ -212,7 +239,7 @@ const Home = () => {
             </section>
 
 
-        </div>
+        </div >
     )
 }
 

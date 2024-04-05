@@ -101,11 +101,11 @@ router.get('/products/search/:keyword', async function (req, res) {
   res.json(result);
 });
 
-router.get('/products/:id', async function (req, res) {
+router.get('/product/:id', async function (req, res) {
   const _id = req.params.id;
   const product = await ProductDAO.selectByID(_id);
   const comment = await CommentDao.selectByID(_id);
-  res.json(product, comment);
+  res.json(product);
 });
 
 

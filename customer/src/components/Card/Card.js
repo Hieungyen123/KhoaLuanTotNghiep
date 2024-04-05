@@ -5,6 +5,8 @@ import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import PreviewOutlinedIcon from '@mui/icons-material/PreviewOutlined';
 import AddShoppingCartOutlinedIcon from '@mui/icons-material/AddShoppingCartOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import { Link } from 'react-router-dom';
+
 const Card = ({ product }) => {
     const cx = classNames.bind(styles)
     const [modal, setModal] = useState(false);
@@ -13,7 +15,7 @@ const Card = ({ product }) => {
     };
     console.log(product)
     return (
-        <>
+        <Link to={"/product/" + product._id}>
             <div className={cx('Card')}>
                 <img src={product.image.path} alt="Anh san pham" />
                 <addr title="quick view" onClick={toggleModal} ><VisibilityOutlinedIcon className={cx('QuickView-Icon')} /></addr>
@@ -53,7 +55,7 @@ const Card = ({ product }) => {
                     </div>
                 </div>
             )}
-        </>
+        </Link>
     )
 }
 

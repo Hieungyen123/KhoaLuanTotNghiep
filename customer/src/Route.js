@@ -2,6 +2,7 @@ import Home from "./Page/HomePage/Home"
 import Search from "./Page/Search/Search"
 import Login from "./Page/Login/Login"
 import Register from "./Page/Register/Register"
+import ProductDetail from "./Page/ProductDetail/ProductDetail"
 export const MainRoute = [
     {
         path: "/home",
@@ -14,6 +15,14 @@ export const MainRoute = [
     {
         path: "/",
         element: <Home />
+    },
+    {
+        path: "/",
+        element: <Home />
+    },
+    {
+        path: "/product/:id",
+        element: <ProductDetail />
     },
     {
         path: "/*",
