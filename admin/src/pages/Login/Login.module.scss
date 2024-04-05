@@ -1,0 +1,65 @@
+.Login {
+  width: 100%;
+  height: 100vh;
+  background-color: #7aa1bc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  .Model {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    border-radius: 20px;
+    width: 700px;
+    height: 500px;
+    background-color: #7aa1bc;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+      rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+    .Logo {
+      text-align: center;
+      margin: 10px;
+      p {
+      }
+    }
+    .Title {
+      margin: 20px;
+      font-weight: 400;
+    }
+    .Login-content {
+      width: 300px;
+      .Login-input {
+        font-size: 16px;
+        // gap: 10px;
+        display: flex;
+        flex-direction: column;
+        margin: 20px 0;
+        input {
+          height: 30px;
+          background-color: transparent;
+          outline: none;
+          border-left: none;
+          border-right: none;
+          border-top: none;
+          border-bottom: 2px solid #97b9d0;
+          color: white;
+        }
+      }
+      .Login-submit {
+        margin: 40px 0;
+        width: 100%;
+        padding: 8px;
+        cursor: pointer;
+        border-radius: 3px;
+        outline: none;
+        border: none;
+        opacity: 0.9;
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}

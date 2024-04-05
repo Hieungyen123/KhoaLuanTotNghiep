@@ -1,0 +1,14 @@
+.Contract {
+  margin-top: 10px;
+  .Title {
+    // padding-bottom: 10px;
+  }
+  .Add-Btn {
+    padding: 8px;
+    margin: 10px 0;
+    border-radius: 5px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

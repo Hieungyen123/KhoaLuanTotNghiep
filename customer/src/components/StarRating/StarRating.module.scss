@@ -1,0 +1,12 @@
+.StarRating {
+  margin-top: 100px;
+  input[type="radio"] {
+    display: none;
+  }
+  .IconStar {
+    font-size: 30px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

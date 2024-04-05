@@ -1,0 +1,58 @@
+.navbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+  border-bottom: 2px solid rgb(55, 64, 80);
+  border-radius: 2px;
+  // padding: 8px;
+  // flex-direction: column;
+  .content {
+    color: white;
+    align-items: center;
+    display: flex;
+    gap: 25px;
+
+    .icon,
+    .nofi {
+      opacity: 0.8;
+      &:hover {
+        cursor: pointer;
+        opacity: 1;
+      }
+    }
+    .nofi {
+      position: relative;
+      .iconNo {
+      }
+      .bage {
+        font-size: 13px;
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        padding: 2px 6px;
+        border-radius: 50%;
+        background: red;
+        color: white;
+      }
+    }
+
+    .avatar {
+      padding-bottom: 2px;
+
+      align-items: center;
+      display: flex;
+      gap: 8px;
+      img {
+        width: 30px;
+        height: 30px;
+      }
+    }
+  }
+}
+@media screen and (max-width: 1050px) {
+  .navbar {
+    height: 40px;
+  }
+}

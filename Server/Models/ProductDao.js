@@ -1,5 +1,5 @@
 require('../untils/MongoUnil');
-const Models = require('../module.js');
+const Models = require('../Models/module.js');
 
 const ProductDAO = {
   async selectAll() {
@@ -17,13 +17,45 @@ const ProductDAO = {
     return product;
   },
   async update(product) {
-    const newvalues = { name: product.name, price: product.price, image: product.image, category: product.category };
-    const result = await Models.Product.findByIdAndUpdate(product._id, newvalues, { new: true });
-    return result;
+    if (product.image) {
+      const newvalues = {
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        quantity: product.quantity,
+        description: product.description,
+        sideEffects: product.sideEffects,
+        howUse: product.howUse,
+        Brand: product.Brand,
+        usesFor: product.usesFor,
+        SubCategory: product.SubCategory,
+      };
+      const result = await Models.Product.findByIdAndUpdate(product._id, newvalues, { new: true });
+      return { message: 'thành công Update có ảnh mới' };
+    } else {
+      const newvalues = {
+        name: product.name,
+        price: product.price,
+        quantity: product.quantity,
+        description: product.description,
+        sideEffects: product.sideEffects,
+        howUse: product.howUse,
+        Brand: product.Brand,
+        usesFor: product.usesFor,
+        SubCategory: product.SubCategory,
+      };
+      const result = await Models.Product.findByIdAndUpdate(product._id, newvalues, { new: true });
+      // console.log(newvalues, result)
+      // return newvalues
+      return { message: 'thành công Update không có ảnh mới ' };
+    }
+
+
+
   },
   async delete(_id) {
-    const result = await Models.Product.findByIdAndRemove(_id);
-    return result;
+    const result = await Models.Product.findOneAndDelete({ _id: _id });
+    return result, 'thành công xóa';
   },
   async selectTopNew(top) {
     const query = {};
@@ -31,7 +63,7 @@ const ProductDAO = {
     const products = await Models.Product.find(query).sort(mysort).limit(top).exec();
     return products;
   },
-  async selectTopHot(top) {
+  async selectTopHot(top, id) {
     const items = await Models.Order.aggregate([
       { $match: { status: 'APPROVED' } },
       { $unwind: '$items' },
@@ -40,8 +72,10 @@ const ProductDAO = {
       { $limit: top }
     ]).exec();
     var products = [];
+
     for (const item of items) {
-      const product = await ProductDAO.selectByID(item._id);
+      const query = { '_id': item._id, 'SubCategory._id': id };
+      const product = await ProductDAO.find(query);
       products.push(product);
     }
     return products;

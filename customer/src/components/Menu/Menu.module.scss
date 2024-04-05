@@ -1,0 +1,53 @@
+.popover {
+  position: absolute;
+  overflow: hidden;
+  // border: 1px solid;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+    rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  // position: absolute;
+  background-color: white;
+  // width: 300px;
+  // padding: 20px;
+  height: auto;
+  transition: all 0.4s;
+  top: 50px;
+  // right: 0;
+  border-radius: 5px;
+  // position: relative;
+  // width: 400px;
+}
+
+.A {
+  padding: 15px;
+  font-weight: 500;
+}
+.slide {
+  // position: absolute;
+  // width: 100%;
+
+  transition-property: all;
+  transition-duration: 300ms;
+}
+.navMenu {
+  position: relative;
+  display: flex;
+  align-items: center;
+  // width: 300px;
+  // overflow: hidden;
+  // transition: width 0.5s ease-out;
+  a {
+    color: white !important;
+  }
+}
+
+.Menu {
+  display: flex;
+  align-items: center;
+  .icon {
+    width: 20px;
+    padding: 3px;
+    background-color: aqua;
+    height: 20px;
+    border-radius: 50%;
+  }
+}

@@ -1,12 +1,18 @@
 
 require('../untils/MongoUnil');
-const Models = require('./module');
+const Models = require('./module.js')
 
 const CustomerDAO = {
   async selectByUsernameOrEmail(username, email) {
     const query = { $or: [{ username: username }, { email: email }] };
     const customer = await Models.Customer.findOne(query);
     return customer;
+  },
+  async UpdateRefreshToken(_id, token, RefreshToken) {
+    const query = { _id: _id, token: token };
+    const newvalues = { refreshToken: RefreshToken };
+    const result = await Models.Customer.findOneAndUpdate(query, newvalues, { new: true });
+    return result;
   },
   async insert(customer) {
     const mongoose = require('mongoose');
@@ -20,11 +26,12 @@ const CustomerDAO = {
     const result = await Models.Customer.findOneAndUpdate(query, newvalues, { new: true });
     return result;
   },
-  async selectByUsernameAndPassword(username, password) {
-    const query = { username: username, password: password };
+  async selectByEmail(email) {
+    const query = { email: email };
     const customer = await Models.Customer.findOne(query);
     return customer;
   },
+
   async update(customer) {
     const newvalues = { username: customer.username, password: customer.password, name: customer.name, phone: customer.phone, email: customer.email, image: customer.image };
     const result = await Models.Customer.findByIdAndUpdate(customer._id, newvalues, { new: true });
@@ -38,6 +45,10 @@ const CustomerDAO = {
   async selectByID(_id) {
     const customer = await Models.Customer.findById(_id).exec();
     return customer;
+  },
+  async DeleteByID(_id) {
+    const result = await Models.Customer.findOneAndDelete({ _id: _id }).exec();
+    return result;
   }
 
 };

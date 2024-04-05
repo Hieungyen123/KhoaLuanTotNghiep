@@ -1,0 +1,26 @@
+.Customer {
+  margin-top: 10px;
+  // height: 100vh;
+  height: 90%;
+  .info {
+    margin-bottom: 10px;
+    button {
+      padding: 8px;
+
+      border: none;
+      outline: none;
+      border-radius: 3px;
+      p {
+        font-size: 12px;
+        font-weight: 600;
+        opacity: 0.8;
+      }
+      &:hover {
+        cursor: pointer;
+        p {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}

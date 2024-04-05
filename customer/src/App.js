@@ -1,10 +1,18 @@
 import './App.css';
+import { BrowserRouter } from 'react-router-dom'
+import Main from './components/Main/Main';
+import MyProvider from './contexts/MyProvider.js';
 
 function App() {
+
+
   return (
-    <div className="App">
-      <h1>App customer</h1>
-    </div>
+    <MyProvider>
+      <BrowserRouter>
+        <Main />
+      </BrowserRouter>
+    </MyProvider>
+
   );
 }
 
