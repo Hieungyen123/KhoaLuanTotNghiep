@@ -8,6 +8,9 @@
     "build": "(npm install) && (cd ../admin && npm install && npm run build) && (cd ../customer && npm install && npm run build)",
     "start": "nodemon index.js"
   },
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
