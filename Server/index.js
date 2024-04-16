@@ -29,6 +29,23 @@ app.use('/api/customer', require('./api/customer.js'));
 // app.use('/api/auth', require('./api/refeshToken.js'));
 
 
+
+
+// var path = require('path');
+// // console.log('__dirname',__dirname)
+// // '/admin' serve the files at client-admin/build/* as static files
+// app.use('/admin', express.static(path.resolve(__dirname, '../admin/public')));
+// app.get('admin/*', (req, res) => {
+//     res.sendFile(path.resolve(__dirname, '../admin/public', 'index.html'))
+// });
+// // '/' serve the files at client-customer/build/* as static files
+// app.use('/', express.static(path.resolve(__dirname, '../customer/public')));
+// app.get('/*', (req, res) => {
+//     res.sendFile(path.resolve(__dirname, '../customer/public', 'index.html'));
+// });
+
+
+
 app.listen(port, () => {
     console.log(`Example app listening on port http://localhost:${port}/home`);
 });

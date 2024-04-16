@@ -7,7 +7,7 @@ import { debounce } from 'lodash';
 import CircularProgress from '@mui/material/CircularProgress';
 
 import LinearProgress from '@mui/material/LinearProgress';
-const Add = ({ columns, setOpen, slug, fetchData, url, img, categories, SubCategory, Brand, BrandOrigin }) => {
+const Add = ({ columns, setOpen, slug, fetchData, url, img, categories, SubCategory, Brand, BrandOrigin, role }) => {
     const cx = classNames.bind(styled);
 
     const Context = useContext(MyContext);
@@ -86,10 +86,10 @@ const Add = ({ columns, setOpen, slug, fetchData, url, img, categories, SubCateg
                 </span>
                 <h1>Add new{slug}</h1>
                 {loading && <LinearProgress style={{ marginBottom: '10px' }} />}
-                <form onSubmit={handleSubmit} enctype="multipart/form-data">
+                <form onSubmit={handleSubmit} enctype="multipart/form-data" >
                     {columns
                         .map((column) => {
-                            if (column.headerName === 'description' || column.headerName === 'howUse' || column.headerName === 'usesFor') {
+                            if (column.headerName === 'description' || column.headerName === 'howUse' || column.headerName === 'usesFor' || column.headerName === 'descriptionLong') {
                                 return (
                                     <div key={column.field} className={cx("item")} >
                                         <label>{column.field}</label>
@@ -194,6 +194,22 @@ const Add = ({ columns, setOpen, slug, fetchData, url, img, categories, SubCateg
                                         <option className={cx("option")} value='Hàn Quốc'>Hàn Quốc</option>
                                         <option className={cx("option")} value='Thụy Sĩ'>Thụy Sĩ</option>
                                         <option className={cx("option")} value='Ý'>Ý</option>
+                                    </select>
+                                </>
+
+
+                            </div>
+                        )}
+                    {role &&
+                        (
+                            <div className={cx("cusomselect")}>
+                                <>
+                                    <label>Role User</label>
+                                    <select required onChange={handleChange} name='role' className={cx("Select")}>
+                                        <option value="">-- Select --</option>
+                                        <option className={cx("option")} value='0'>Người dùng</option>
+                                        <option className={cx("option")} value='1'>Admin</option>
+
                                     </select>
                                 </>
 

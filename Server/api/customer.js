@@ -11,6 +11,7 @@ const OrderDAO = require('../Models/OrderDAO.js');
 const CommentDao = require('../Models/commentsDao.js');
 const subcategoriesDao = require('../Models/subcatoriesDao.js')
 const BrandDAO = require('../Models/BrandDao.js')
+const RatingDAO = require('../Models/RatingDao.js')
 
 //utils
 const CryptoUtil = require('../untils/CryptoUtil.js');
@@ -29,6 +30,10 @@ router.get('/subcategories', async function (req, res) {
   const subcategories = await subcategoriesDao.selectAll();
   res.json(subcategories);
 });
+router.get('/subcategories/:cid', async function (req, res) {
+  const subcategories = await subcategoriesDao.selectByIDCategory();
+  res.json(subcategories);
+});
 //Brand
 router.get('/brand', async function (req, res) {
   //lấy 10 loại 
@@ -42,6 +47,14 @@ router.get('/products/new', async function (req, res) {
   const products = await ProductDAO.selectTopNew(11);
   res.json(products);
 });
+router.get('/products', async function (req, res) {
+  const products = await ProductDAO.selectAll();
+  const filteredProducts = products.map(product => {
+    const { _id, name, price, quantity, image, Brand, SubCategory, promotion, description } = product;
+    return { _id, name, price, quantity, image, Brand, SubCategory, promotion, description };
+  });
+  res.json(filteredProducts);
+});
 router.get('/products/hot/:cid', async function (req, res) {
   const _cid = req.params.cid;
   const products = await ProductDAO.selectTopHot(4, _cid);
@@ -49,13 +62,12 @@ router.get('/products/hot/:cid', async function (req, res) {
   res.json(products);
 });
 
-
 router.get('/products/category/:cid', async function (req, res) {
-  const categories = await CategoryDAO.selectAll();
   const _cid = req.params.cid;
-  var products = await ProductDAO.selectByCatID(_cid);
-
-  const sizePage = 8;
+  const subcategories = await subcategoriesDao.selectByIDCategory(_cid);
+  var products = await ProductDAO.selectByCategoryID(_cid);
+  var category = await CategoryDAO.selectByID(_cid)
+  const sizePage = 4;
   const noPages = Math.ceil(products.length / sizePage);
   var curPage = 1;
   if (req.query.page)
@@ -63,24 +75,32 @@ router.get('/products/category/:cid', async function (req, res) {
   const offset = (curPage - 1) * sizePage;
   products = products.slice(offset, offset + sizePage);
   // return
-  const result = { products: products, noPages: noPages, curPage: curPage, categories: categories };
+  const filteredProducts = products.map(product => {
+    const { _id, name, price, quantity, image, Brand, SubCategory, promotion, description } = product;
+    return { _id, name, price, quantity, image, Brand, SubCategory, promotion, description };
+  });
+  const result = { products: filteredProducts, noPages: noPages, curPage: curPage, subcategories: subcategories, category: category };
   res.json(result);
 });
 
-router.get('/products/category', async function (req, res) {
+router.get('/allproducts', async function (req, res) {
   // get data
   var products = await ProductDAO.selectAll();
-  const categories = await CategoryDAO.selectAll();
+  // const categories = await CategoryDAO.selectAll();
   // pagination
-  const sizePage = 8;
+  const sizePage = 4;
   const noPages = Math.ceil(products.length / sizePage);
   var curPage = 1;
   if (req.query.page)
     curPage = parseInt(req.query.page); // /products?page=xxx
   const offset = (curPage - 1) * sizePage;
   products = products.slice(offset, offset + sizePage);
+  const filteredProducts = products.map(product => {
+    const { _id, name, price, quantity, image, Brand, SubCategory, promotion, description } = product;
+    return { _id, name, price, quantity, image, Brand, SubCategory, promotion, description };
+  });
   // return
-  const result = { products: products, noPages: noPages, curPage: curPage, categories: categories };
+  const result = { products: filteredProducts, noPages: noPages, curPage: curPage };
   res.json(result);
 });
 
@@ -105,11 +125,28 @@ router.get('/product/:id', async function (req, res) {
   const _id = req.params.id;
   const product = await ProductDAO.selectByID(_id);
   const comment = await CommentDao.selectByID(_id);
+  console.log('lỗi')
   res.json(product);
 });
 
 
+//Rating 
+router.get('/rating/:id', async function (req, res) {
+  const idProduct = req.params.id;
+  // console.log('idProduct', idProduct)
+  const result = await RatingDAO.selectByID(idProduct);
+  // console.log(result)
+  res.json({ result, success: true });
+});
+router.post('/rating', async function (req, res) {
+  console.log(req.body)
+  const customerID = req.body.CustomerID;
+  const productID = req.body.productID;
+  const valueRating = req.body.valueRating;
 
+  const result = await RatingDAO.insert(req.body);
+  res.json({ result, success: true });
+});
 //  comments
 router.get('/comment', async function (req, res) {
   const comment = await CommentDao.selectAll();
@@ -117,15 +154,19 @@ router.get('/comment', async function (req, res) {
 });
 
 router.get('/comment/:id', async function (req, res) {
-  const comment = await CommentDao.selectByID(_id);
-  res.json(product, comment);
+  const idProduct = req.params.id;
+  // console.log(req.body)
+  const comment = await CommentDao.selectByID(idProduct);
+  res.json(comment);
 });
 
 router.post('/comment/:id', async function (req, res) {
-  const _id = req.params.id;
+  const idProduct = req.params.id;
   console.log(req.body)
-  const content = req.body.comment;
-  const comment = { content: content, product_ID: _id };
+  const value = req.body.value;
+  const customer = req.body.customer;
+  const now = new Date().getTime();
+  const comment = { value: value, customer: customer, productID: idProduct, cdate: now };
   const result = await CommentDao.insert(comment);
   res.json(result);
 });
@@ -147,7 +188,7 @@ router.post('/signup', async function (req, res) {
     const now = new Date().getTime(); // milliseconds
     const token = CryptoUtil.md5(now.toString());
     // const newCust = { username: username, password: password, name: name, phone: phone, email: email, image: image, active: 0, token: token };
-    const newCust = { username: username, password: password, email: email, active: 0, token: token };
+    const newCust = { username: username, password: password, email: email, active: 0, token: token, role: 1 };
     const result = await CustomerDAO.insert(newCust);
     if (result) {
       const send = await EmailUtil.send(email, result._id, token);

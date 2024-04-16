@@ -14,7 +14,8 @@ const UpdateBrand = ({ slug, columns, value, setOpenUpdate, fetchData, categorie
     // console.log(categories)
     const [inputName, setInputName] = useState(value.name)
     const [inputImage, setInputImage] = useState(null)
-    const [oldImage, setOldImage] = useState(value.image.filename)
+    const [oldImage, setOldImage] = useState(value.image ? value.image?.filename : "")
+
     const [Origin, setInputOrigin] = useState(value.BrandOrigin)
     const [description, setInputdescription] = useState(value.description)
 

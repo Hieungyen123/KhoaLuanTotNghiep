@@ -16,6 +16,35 @@
 body.active-modal {
   overflow-y: hidden;
 }
+.Modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 10%;
+  .item {
+    width: 100%;
+    margin: 10px 0;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+    .inputpersentage {
+      border: 1px solid #222b3c;
+      width: 200px;
+      height: 30px;
+      padding: 10px;
+    }
+    button {
+      border: none;
+      padding: 8px 20px;
+      border-radius: 10px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}
 .overlay {
   background: rgba(49, 49, 49, 0.8);
   width: 100vw;

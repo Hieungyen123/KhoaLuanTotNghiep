@@ -44,6 +44,7 @@ const Home = () => {
     const [brand, setBrand] = useState([])
     const [products, setProducts] = useState([])
     const [open, setOpen] = useState(true)
+    const [isDataLoaded, setIsDataLoaded] = useState(false);
 
 
     const settingsBrand = {
@@ -103,16 +104,15 @@ const Home = () => {
     const UseFetchBrand = () => {
         axios.get('/api/customer/brand').then((res) => {
             const result = res.data;
-            // console.log(result)
-            // console.log(result)
             setBrand(result)
         })
     }
     const FetchProducts = () => {
-        axios.get('/api/customer/products/new').then((res) => {
+        axios.get('/api/customer/products').then((res) => {
             const result = res.data;
             // console.log(result)
             // console.log(result)
+            setOpen(false)
             setProducts(result)
         })
     }
@@ -120,16 +120,11 @@ const Home = () => {
         try {
             FetchProducts()
             UseFetchBrand();
-            if (brand.length > 0 && products.length > 0) {
-                setOpen(false)
-            }
         } catch {
-
         }
-
-    }, [products, brand, open])
-
-    // console.log(products)
+    }, [])
+    console.log(products)
+    console.log('home render')
     return (
         <div className={cx("Home")}>
             {/* <section className={cx("Main-Menu")}>

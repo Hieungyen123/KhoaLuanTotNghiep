@@ -3,6 +3,8 @@ import Search from "./Page/Search/Search"
 import Login from "./Page/Login/Login"
 import Register from "./Page/Register/Register"
 import ProductDetail from "./Page/ProductDetail/ProductDetail"
+import CartDetail from "./Page/CartDetail/CartDetail"
+import ProductCategory from "./Page/productCategory/ProductCategory"
 export const MainRoute = [
     {
         path: "/home",
@@ -25,8 +27,12 @@ export const MainRoute = [
         element: <ProductDetail />
     },
     {
-        path: "/*",
-        element: () => (<div>404</div>)
+        path: "/cartdetail",
+        element: <CartDetail />
+    },
+    {
+        path: "/product-category/:id",
+        element: <ProductCategory />
     },
 ]
 export const NavRoute = [

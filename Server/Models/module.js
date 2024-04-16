@@ -33,7 +33,9 @@ const CustomerSchema = mongoose.Schema({
   active: Number,
   image: Object,
   token: String,
+  role: String,
   refreshToken: String,
+  Address: Object
 }, { versionKey: false });
 const CustomerCartHistorySchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
@@ -41,12 +43,7 @@ const CustomerCartHistorySchema = mongoose.Schema({
   item: Array,
   CreatedAt: Number,
 }, { versionKey: false });
-const CustomerProductHistorySchema = mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
-  user: CustomerSchema,
-  item: Array,
-  CreatedAt: Number,
-}, { versionKey: false });
+
 const BrandSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   name: String,
@@ -54,10 +51,7 @@ const BrandSchema = mongoose.Schema({
   BrandOrigin: String,
   description: String,
 }, { versionKey: false });
-const DescProductSchema = mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
 
-}, { versionKey: false });
 const ProductSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   name: String,
@@ -66,50 +60,48 @@ const ProductSchema = mongoose.Schema({
   cdate: Number,
   quantity: Number,
   description: String,
+  descriptionLong: String,
   howUse: String,
   usesFor: String,
   sideEffects: String,
   caption: String,
   Brand: Object,
   SubCategory: Object,
+  promotion: {
+    startDate: Date,
+    endDate: Date,
+    discountPercent: Number,
+  },
 }, { versionKey: false });
-
 const ItemSchema = mongoose.Schema({
   product: ProductSchema,
   quantity: Number
 }, { versionKey: false, _id: false });
-const Shippingchema = mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
-  name: String,
-  price: Number,
-  Description: String,
-}, { versionKey: false });
-
 const OrderSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   cdate: Number,
   total: Number,
   status: String,
-  customer: CustomerSchema,
+  UserID: String,
   items: [ItemSchema],
-  ShippingMethod: Shippingchema,
   Address: String,
+  ShippingMethod: String
 }, { versionKey: false });
 const CommentsSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  product_ID: Number,
+  productID: String,
   customer: CustomerSchema,
-  content: String,
+  value: String,
   cdate: Number,
 
 }, { versionKey: false });
 
 const RatingSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  product: ProductSchema,
-  customer: CustomerSchema,
+  productID: String,
+  customerID: String,
   ratingValue: Number,
-
+  cdate: Number,
 }, { versionKey: false });
 // models
 // const Admin = mongoose.model('Admin', AdminSchema);
@@ -132,10 +124,6 @@ const Models = {
   Rating: mongoose.models.Rating || mongoose.model('Rating', RatingSchema),
   Brand: mongoose.models.Brand || mongoose.model('Brand', BrandSchema),
   SubCategory: mongoose.models.SubCategory || mongoose.model('SubCategory', SubCategorySchema),
-  Shipping: mongoose.models.Shipping || mongoose.model('Shipping', Shippingchema),
-  DescProduct: mongoose.models.DescProduct || mongoose.model('DescProduct', DescProductSchema),
-  CustomerProductHistory: mongoose.models.DescProduct || mongoose.model('CustomerProductHistory', CustomerProductHistorySchema),
-  CustomerCartHistory: mongoose.models.DescProduct || mongoose.model('CustomerCartHistory', CustomerCartHistorySchema),
+  CustomerCartHistory: mongoose.models.CustomerCartHistory || mongoose.model('CustomerCartHistory', CustomerCartHistorySchema),
 };
-
 module.exports = Models;

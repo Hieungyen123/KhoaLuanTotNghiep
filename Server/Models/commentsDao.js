@@ -11,10 +11,10 @@ const CommetDao = {
         const mongoose = require('mongoose');
         comment._id = new mongoose.Types.ObjectId();
         const result = await Models.Comments.create(comment);
-        return result;
+        return { message: 'Cảm ơn bạn đã bình luận' };
     },
     async selectByID(product_id) {
-        const comment = await Models.Comments.findById(product_id).exec();
+        const comment = await Models.Comments.find({ productID: product_id }).exec();
         return comment;
     },
     async delete(_id) {

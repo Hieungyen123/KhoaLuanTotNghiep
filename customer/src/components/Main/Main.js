@@ -50,7 +50,7 @@ const Main = () => {
                                     const result = res.data;
                                     if (result === false) {
                                         if (!Context.isWarningDisplayed) {
-                                            Context.SetnotifyWarning('Phiên đăng nhập của bạn đã hết hạn');
+                                            // Context.SetnotifyWarning('Phiên đăng nhập của bạn đã hết hạn');
                                             Context.setWarningDisplayed();
                                         }
                                     } else {

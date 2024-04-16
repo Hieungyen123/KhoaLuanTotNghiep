@@ -36,31 +36,10 @@ const onChange = (e) => {
 
 {
     comment.map((input) => (
-        <FormInput
-            key={input.id}
-            {...input}
-            value={valuesComment[input.name]}
-            onChange={onChange}
-        />
+       
     ))
 }
 <button onClick={handleButtonClick} >submiit</button>
 
 
 
-const handleSubmitCheckToken = (e) => {
-    e.preventDefault();
-    const refreshToken = localStorage.getItem("refreshToken");
-    console.log(refreshToken)
-    const config = { refreshToken: refreshToken }
-    // const config = { headers: { 'x-access-token': refreshToken } };
-
-    axios.post('/api/customer/refreshtoken', config).then((res) => {
-        const result = res;
-        console.log(result.data)
-        localStorage.setItem('accessToken', result.data.accessToken);
-        localStorage.setItem('refreshToken', result.data.newRefreshToken);
-        Context.setToken(result.data.accessToken);
-        Context.setCustomer(result.data.customer);
-    })
-}

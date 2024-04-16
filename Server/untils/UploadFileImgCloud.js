@@ -15,7 +15,7 @@ const storage = new CloudinaryStorage({
     allowedFormats: ['jpeg', 'jpg', 'png', 'webp'],
     params: {
         folder: 'Products-Image',
-        transformation: [{ width: 200, height: 200, }],
+        transformation: [{ width: 400, height: 400, }],
     }
 
 });
@@ -24,7 +24,7 @@ const storageSubcate = new CloudinaryStorage({
     allowedFormats: ['jpeg', 'jpg', 'png', 'webp'],
     params: {
         folder: 'Subcate-Image',
-        transformation: [{ width: 200, height: 200, }],
+        transformation: [{ width: 400, height: 400, }],
     }
 });
 const storageBrand = new CloudinaryStorage({
@@ -32,7 +32,7 @@ const storageBrand = new CloudinaryStorage({
     allowedFormats: ['jpeg', 'jpg', 'png', 'webp'],
     params: {
         folder: 'Brand-Image',
-        transformation: [{ width: 200, height: 200, }],
+        transformation: [{ width: 400, height: 400, }],
     }
 });
 const storageUser = new CloudinaryStorage({
@@ -40,7 +40,7 @@ const storageUser = new CloudinaryStorage({
     allowedFormats: ['jpeg', 'jpg', 'png', 'webp'],
     params: {
         folder: 'User-Image',
-        transformation: [{ width: 200, height: 200, }],
+        transformation: [{ width: 400, height: 400, }],
     }
 
 });
@@ -49,7 +49,7 @@ const storageProducts = new CloudinaryStorage({
     allowedFormats: ['jpeg', 'jpg', 'png', 'webp'],
     params: {
         folder: 'Products-Image',
-        transformation: [{ width: 200, height: 200, }],
+        transformation: [{ width: 400, height: 400, }],
     }
 });
 

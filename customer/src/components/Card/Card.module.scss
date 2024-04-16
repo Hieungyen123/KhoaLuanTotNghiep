@@ -1,4 +1,5 @@
 .Card {
+  z-index: 499;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -28,7 +29,23 @@
   .addr {
     height: 0;
   }
+  .promotion {
+    top: 0;
+    left: 0;
+    position: absolute;
+    background-image: linear-gradient(295deg, #cd1a0c 0%, #ff5246 98.45%);
+    border-bottom-right-radius: 10px;
+    color: white;
+    // width: 50px;
+    // height: 20px;
+    padding: 1px 6px;
+    span {
+      font-size: 14px;
+      font-weight: 600;
+    }
+  }
   .QuickView-Icon {
+    z-index: 500;
     opacity: 0%;
     transition: all 0.2s ease-in;
     position: absolute;
@@ -46,7 +63,7 @@
   img {
     // border-bottom: 1px solid var(--GreyBg);
     width: 100%;
-    max-height: 180px;
+    max-height: 170px;
     object-fit: contain;
     padding: 5px;
   }
@@ -55,7 +72,7 @@
     padding: 0 10px 0 10px;
     width: 100%;
     .Title {
-      height: 40px;
+      height: 44px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -76,7 +93,7 @@
     }
     .Cart {
       display: flex;
-      align-items: center;
+      // align-items: center;
       justify-content: space-between;
       .Icon {
         padding: 7px;
@@ -87,6 +104,9 @@
           color: white;
           cursor: pointer;
         }
+      }
+      .Price {
+        font-weight: 500;
       }
     }
   }

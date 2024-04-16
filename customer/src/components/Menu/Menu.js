@@ -4,18 +4,15 @@ import { useState, useRef, useEffect } from 'react';
 import styles from './Menu.module.scss'
 import classNames from "classnames/bind";
 
-import Menu1 from './SubMenu/Menu1';
-import Menu2 from './SubMenu/Menu2';
-import { SlideWrapper } from './SlideWrapper';
 import axios from 'axios';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { Link } from 'react-router-dom';
 const Menu = () => {
 
     const cx = classNames.bind(styles)
     const [categories, SetCategories] = useState([])
     const [subCategories, SetSubCategories] = useState([])
-    const [hovering, setHovering] = useState(null);
-    const [popoverLeft, setPopoverLeft] = useState(null);
-    const [popoverHeight, setPopoverHeight] = useState(null);
+    const [hovering, setHovering] = useState(false);
 
     const fetchCategory = () => {
         axios.get('/api/customer/categories').then((res) => {
@@ -40,45 +37,66 @@ const Menu = () => {
     // console.log(subCategories)
 
     const refs = useRef([]);
+    const [hover, setHover] = useState(0);
 
-    const onMouseEnter = (index, el) => {
-        setHovering(index);
-        setPopoverLeft(el.offsetLeft);
-        const menuElement = refs.current[index];
-        if (menuElement) {
-            setPopoverHeight(menuElement.offsetHeight);
-        }
-    };
+    // console.log(categories)
+    const onMouseEnter = (index) => {
+        setHover(index)
+        setHovering(true)
+    }
+    const filteredSubCategories = subCategories.filter(subcate => subcate.idcategory === hover && subcate.hasOwnProperty("image"));
+
     return (
         <div className={cx("Menu")}>
-            <nav className={cx('navMenu')} onMouseLeave={() => {
-                setHovering(null)
-            }} >
-                <a
-                    onMouseEnter={(event) => onMouseEnter(0, event.currentTarget)}
-                    href="/"
-                    className={cx("A")}
-                >
-                    Danh Mục
-                </a>
-                <div className={cx("popover")} style={{
-                    left: popoverLeft - 80 || 0,
-                    height: popoverHeight || 0,
-                    pointerEvents: hovering === null && 'none',
-                    opacity: hovering !== null ? '100%' : 0,
-                    transform: hovering === null ? 'translateX(-30px)' : 'translateX(0)',
-                }}>
-                    <SlideWrapper index={0} hovering={hovering} >
-                        <Menu1
-                            ref={element => (refs.current[0] = element)}
-                            hovering={hovering}
-                            category={categories}
-                            subCategories={subCategories}
-                        />
-                    </SlideWrapper>
+            <div className='container'>
+                <div className={cx("Content")}>
+                    <div className={cx("List-category")} >
+                        {categories.length > 0
+                            ? categories.map((item) => {
+                                return (
+                                    <Link key={item._id} to={'/product-category/' + item._id} onMouseEnter={() => onMouseEnter(item._id)} className={cx("Item-Category")} >
+                                        <p>{item.name}</p>
+                                        <KeyboardArrowDownIcon className={cx("icon")} style={{ transform: hovering && item._id === hover ? 'rotate(180deg)' : 'rotate(0)' }} />
+                                    </Link>
+                                )
+                            })
+                            : null
+                        }
+                    </div>
+                    {hovering === true &&
+                        <div className={cx("List-subcategory")} >
+                            <div className={cx("List-subcategory-item")} onMouseLeave={() => setHovering(false)} >
+                                <div className={cx("List-subcategory-item-list")}>
+                                    {
+                                        filteredSubCategories.map((item, index) => {
+                                            if (index < 6) {
+                                                return (
+                                                    <Link key={item._id} to={'#'} className={cx("item")} style={{
+
+                                                    }}
+                                                    >
+                                                        <img src={item.image.path} alt="" />
+                                                        <p>{item.name}</p>
+                                                    </Link>
+                                                )
+                                            }
+                                        })
+
+
+
+                                    }
+                                </div>
+                                <div className={cx("List-subcategory-item-product")}>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    }
                 </div>
-            </nav >
-        </div>
+            </div>
+
+        </div >
     )
 }
 

@@ -33,9 +33,31 @@ const CustomerDAO = {
   },
 
   async update(customer) {
-    const newvalues = { username: customer.username, password: customer.password, name: customer.name, phone: customer.phone, email: customer.email, image: customer.image };
-    const result = await Models.Customer.findByIdAndUpdate(customer._id, newvalues, { new: true });
-    return result;
+    if (customer.image) {
+      const newvalues = {
+        username: customer.username,
+        password: customer.password,
+        image: customer.image,
+        phone: customer.phone,
+        email: customer.email,
+        role: customer.role,
+      };
+      const result = await Models.Customer.findByIdAndUpdate(customer._id, newvalues, { new: true });
+      return { message: 'thành công Sửa user có ảnh mới' };
+    } else {
+      const newvalues = {
+        username: customer.username,
+        password: customer.password,
+        phone: customer.phone,
+        email: customer.email,
+        active: customer.active,
+        role: customer.role,
+      };
+      const result = await Models.Customer.findByIdAndUpdate(customer._id, newvalues, { new: true });
+      // console.log(newvalues, result)
+      // return newvalues
+      return { message: 'thành công Sửa user có ảnh mới' };
+    }
   },
   async selectAll() {
     const query = {};

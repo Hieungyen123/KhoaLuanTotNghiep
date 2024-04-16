@@ -7,16 +7,25 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { Link } from 'react-router-dom';
 import MyContext from '../../contexts/MyContext';
 
+import Cart from '../Cart/Cart';
 
 // icon 
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import CampaignOutlinedIcon from '@mui/icons-material/CampaignOutlined';
 const Nav = () => {
 
 
     const [open, setOpen] = useState(false)
+    const [openCart, setOpenCart] = useState(false)
     const Context = useContext(MyContext);
     const cx = classNames.bind(styles)
+
+
+    const HandleCart = () => {
+        setOpen(!open)
+
+    }
 
     return (
         <div className={cx("Nav")}>
@@ -30,6 +39,7 @@ const Nav = () => {
                     }}>
                         <div className={cx("Left")}>
                             <Link to='/home'><img src={logo} alt="" /></Link>
+
 
                             {/* <Link to="/search">search</Link> */}
                         </div>
@@ -53,19 +63,22 @@ const Nav = () => {
                         </div>
                     </div>
                     <div className={cx("Bottom")}>
-                        <Menu />
+                        <div></div>
+
                         <div className={cx("Input")} >
                             <input type="text" />
                             <SearchOutlinedIcon className={cx("icon-search")}></SearchOutlinedIcon>
                         </div>
-                        <div className={cx("Shopping-cart")}  >
+                        <div className={cx("Shopping-cart")} onMouseEnter={() => setOpenCart(true)}
+                            onMouseLeave={() => setOpenCart(false)} >
                             <ShoppingCartIcon className={cx("icon")}></ShoppingCartIcon>
+                            <Cart openCart={openCart} setOpenCart={setOpenCart} />
+
                         </div>
                     </div>
 
                 </div>
             </div>
-
         </div>
     )
 }

@@ -37,10 +37,10 @@ const Login = () => {
             name: "password",
             type: "password",
             placeholder: "Password",
-            errorMessage:
-                "Password should be 8-20 characters and include at least 1 letter, 1 number and 1 special character!",
+            // errorMessage:
+            // "Password should be 8-20 characters and include at least 1 letter, 1 number and 1 special character!",
             label: "Password",
-            pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
+            // pattern: `^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$`,
             required: true,
         },
     ];
@@ -52,7 +52,7 @@ const Login = () => {
                 const result = res.data;
                 // console.log(result)
                 if (result.success === true) {
-                    console.log(result)
+                    // console.log(result)
                     Context.setToken(result.token);
                     Context.setCustomer(result.customer);
                     localStorage.setItem('accessToken', result.token);

@@ -11,11 +11,12 @@ import BuildCircleOutlinedIcon from '@mui/icons-material/BuildCircleOutlined';
 import UpdateProduct from '../Update/UpdateProduct';
 import UpdateSubcate from '../Update/UpdateSubcate';
 import UpdateBrand from '../Update/UpdateBrand'
+import UpdateCustomer from '../Update/UpdateCustomer';
 import { Modal } from '@mui/material';
 
 import CircularProgress from '@mui/material/CircularProgress';
 
-const Table = ({ columns, rows, fetchData, update, urlDelete, fortable, updateProduct, updateSubcate, Updatebrand }) => {
+const Table = ({ promotion, columns, rows, fetchData, update, urlDelete, fortable, updateProduct, updateSubcate, Updatebrand, updateCustomer }) => {
     const Context = useContext(MyContext);
     const formData = new FormData();
     const [open, setOpen] = useState(false)
@@ -25,6 +26,9 @@ const Table = ({ columns, rows, fetchData, update, urlDelete, fortable, updatePr
     const [brand, setBrand] = useState([]);
     const [categories, setCategories] = useState([]);
 
+
+
+    console.log('Các hàng đã chọn:', Context.rowSelectionModel);
 
 
     const handleOpen = () => {
@@ -96,7 +100,6 @@ const Table = ({ columns, rows, fetchData, update, urlDelete, fortable, updatePr
             setCategories(result)
         })
     }
-
     useEffect(() => {
         if (openUpdate && fortable === 'product') {
             fetchDataSubcate();
@@ -105,6 +108,8 @@ const Table = ({ columns, rows, fetchData, update, urlDelete, fortable, updatePr
             fetchDataCategory();
         }
     }, [openUpdate, setOpen]);
+
+
 
 
 
@@ -144,6 +149,7 @@ const Table = ({ columns, rows, fetchData, update, urlDelete, fortable, updatePr
             {openUpdate && updateProduct ? <UpdateProduct slug={'Update Product'} subCategory={subCategory} brand={brand} fetchData={fetchData} setOpenUpdate={setOpenUpdate} columns={columns} value={value} /> : null}
             {openUpdate && updateSubcate === 'true' ? <UpdateSubcate slug={'Update Product'} categories={categories} fetchData={fetchData} setOpenUpdate={setOpenUpdate} columns={columns} value={value} /> : null}
             {openUpdate && Updatebrand === 'true' ? <UpdateBrand slug={'Update Brand'} categories={categories} fetchData={fetchData} setOpenUpdate={setOpenUpdate} columns={columns} value={value} /> : null}
+            {openUpdate && updateCustomer === 'true' ? <UpdateCustomer slug={'Update Customer'} fetchData={fetchData} setOpenUpdate={setOpenUpdate} columns={columns} value={value} /> : null}
             <DataGrid
                 style={{ height: '100%', width: '100%' }}
                 className='dataTable'
@@ -165,9 +171,13 @@ const Table = ({ columns, rows, fetchData, update, urlDelete, fortable, updatePr
                 }}
                 getRowId={(rows) => rows._id}
                 pageSizeOptions={[6]}
-                checkboxSelection
+                checkboxSelection={promotion ? true : false}
                 disableRowSelectionOnClick
                 rowHeight={90}
+                onRowSelectionModelChange={(ids) => {
+                    Context.setRowSelectionModel(ids);
+                }}
+            // disableMultipleRowSelection={true}
             />
 
         </div>

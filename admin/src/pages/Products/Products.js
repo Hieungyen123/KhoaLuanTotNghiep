@@ -6,6 +6,14 @@ import MyContext from '../../contexts/MyContext';
 import Add from '../../components/Add/Add';
 import axios from "axios";
 import { Skeleton } from '@mui/material';
+import Modal from '@mui/material/Modal';
+
+import dayjs from 'dayjs';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 const Products = () => {
     const cx = classNames.bind(styled);
     const Context = useContext(MyContext);
@@ -13,10 +21,40 @@ const Products = () => {
 
     const [products, setProducts] = useState([]);
     const [open, setOpen] = useState(false)
+    const [openPromotion, setOpenPromotion] = useState(false)
     const [subCategory, setSubCategory] = useState([])
     const [brand, setBrand] = useState([]);
+    const [startDate, setStartDate] = useState(dayjs(new Date()));
+    const [endDate, setEndDate] = useState(dayjs(new Date()));
+    const [inputpersentage, setInputpersentage] = useState(0);
 
-    // console.log(Context.token)
+
+
+    // var formattedStartDate = startDate.format('YYYY-MM-DD');
+    // var formattedEndDate = endDate.format('YYYY-MM-DD');
+
+    const handelUpdatePromotion = () => {
+        if (Context.rowSelectionModel.length > 0 && inputpersentage > 0) {
+            var promotion = {
+                startDate: startDate,
+                endDate: endDate,
+                discountPercent: inputpersentage,
+                product: Context.rowSelectionModel
+            }
+            console.log(promotion)
+            const config = { headers: { 'x-access-token': Context.token } };
+
+            axios.put('/api/admin/products/promotion', promotion, config).then((res) => {
+                const result = res.data;
+                // setProducts(result.products);
+                Context.SetnotifySuccess(result.message)
+                handleOpenPromotion();
+            });
+        } else {
+            Context.SetnotifyWarning('hong được a kiểm tra lại thiếu gì hong')
+        }
+
+    }
     var fetchDataproduct = async () => {
         try {
             const config = { headers: { 'x-access-token': Context.token } };
@@ -59,13 +97,11 @@ const Products = () => {
 
         }
     }
-
     const handleOpenAdd = () => {
         setTimeout(() => {
             setOpen(true)
         }, 1000)
     }
-
     useEffect(() => {
         fetchDataproduct();
         if (open) {
@@ -74,8 +110,6 @@ const Products = () => {
         }
 
     }, [setProducts, open]);
-
-
     const columnList = [
         { field: '_id', headerName: 'ID', width: 90 },
         {
@@ -146,6 +180,12 @@ const Products = () => {
 
         },
         {
+            field: 'Description Long',
+            headerName: 'descriptionLong',
+            width: 100,
+
+        },
+        {
             field: 'How to use',
             headerName: 'howUse',
             width: 100,
@@ -165,21 +205,83 @@ const Products = () => {
 
 
     ];
+    const handleOpenPromotion = () => {
+        setOpenPromotion(!openPromotion)
+    }
 
-
-    console.log(products)
-
-
+    const style = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        height: 500,
+        backgroundColor: 'white',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+    };
     return (
         <div className={cx('Products')}>
             <div className={cx('info')} >
                 {isLoading ? <Skeleton variant="rectangular" width={40} height={30} /> : <button onClick={handleOpenAdd} ><p>New Product</p></button>}
+                {isLoading ? <Skeleton variant="rectangular" width={40} height={30} /> : <button onClick={handleOpenPromotion} ><p>Add promotion</p></button>}
             </div>
             {isLoading ? <Skeleton variant="rectangular" width={'100%'} height={550} />
-                : (<Table updateProduct={true} columns={columnList} rows={products} update={true} urlDelete={'/api/admin/products/'} fetchData={fetchDataproduct} fortable={'product'} />)}
+                : (<Table promotion={true} updateProduct={true} columns={columnList} rows={products} update={true} urlDelete={'/api/admin/products/'} fetchData={fetchDataproduct} fortable={'product'} />)}
             {open && <Add setOpen={setOpen} columns={columnsNew} SubCategory={subCategory} Brand={brand} img={true} slug={' Product'} fetchData={fetchDataproduct} url={'/api/admin/products'} />
             }
+
+
+            <Modal
+                open={openPromotion}
+                onClose={handleOpenPromotion}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <div style={style}>
+                    <div className='Modal'>
+                        <div className='item'>
+                            <label htmlFor="">Ngày bắt đầu</label>
+
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DemoContainer components={['DatePicker']}>
+                                    <DatePicker
+                                        label="Controlled picker"
+                                        // defaultValue={startDate}
+                                        value={startDate}
+                                        onChange={(newValue) => setStartDate(newValue)}
+                                    />
+                                </DemoContainer>
+                            </LocalizationProvider>
+                        </div>
+                        <div className='item'>
+                            <label htmlFor="">Ngày kết thúc</label>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DemoContainer components={['DatePicker']}>
+                                    <DatePicker
+                                        label="Controlled picker"
+                                        // defaultValue={startDate}
+                                        value={endDate}
+                                        onChange={(newValue) => setEndDate(newValue)}
+                                    />
+                                </DemoContainer>
+                            </LocalizationProvider>
+                        </div>
+                        <div className='item'>
+                            <label htmlFor="">Phần trăm giảm giá</label>
+                            <input className='inputpersentage' value={inputpersentage} onChange={(e) => setInputpersentage(e.target.value)} type="number" />
+                        </div>
+                        <div className='item'>
+                            <button onClick={handelUpdatePromotion}>Lưu</button>
+                        </div>
+                    </div>
+                </div>
+            </Modal>
+
+
         </div>
+
     )
 }
 

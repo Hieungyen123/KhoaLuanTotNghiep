@@ -50,8 +50,13 @@ const Customer = () => {
             width: 50,
         },
         {
-            field: 'Mobile',
+            field: 'phone',
             headerName: 'Mobile',
+            width: 150,
+        },
+        {
+            field: 'role',
+            headerName: 'Role',
             width: 150,
         },
     ];
@@ -93,8 +98,8 @@ const Customer = () => {
             <div className={cx('info')} >
                 {isLoading ? <Skeleton variant="rectangular" width={40} height={30} /> : <button onClick={() => setOpen(true)} ><p>New Customer</p></button>}
             </div>
-            <Table columns={columns} rows={customers} update={true} urlDelete={"/api/admin/customers/"} fetchData={fetchData} />
-            {open && <Add setOpen={setOpen} columns={columnsNew} img={false} slug={'Customer'} fetchData={fetchData} url="/api/admin/customers/singup" />
+            <Table updateCustomer={'true'} columns={columns} rows={customers} update={true} urlDelete={"/api/admin/customers/"} fetchData={fetchData} />
+            {open && <Add setOpen={setOpen} columns={columnsNew} img={false} role={true} slug={'Customer'} fetchData={fetchData} url="/api/admin/customers/singup" />
             }
         </div>
     )

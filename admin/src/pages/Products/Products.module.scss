@@ -2,11 +2,16 @@
   margin-top: 10px;
   // height: 100vh;
   height: 90%;
+  // position: relative;
+
   .info {
+    display: flex;
+    // flex-direction: column;
+    gap: 20px;
     margin-bottom: 10px;
     button {
       padding: 8px;
-
+      max-width: 180px;
       border: none;
       outline: none;
       border-radius: 3px;

@@ -3,7 +3,7 @@ const Models = require('../Models/module.js');
 
 const ProductDAO = {
   async selectAll() {
-    const products = await Models.Product.find();
+    const products = await Models.Product.find().select('-descriptionLong').exec();
     return products;
   },
   async insert(product) {
@@ -29,6 +29,8 @@ const ProductDAO = {
         Brand: product.Brand,
         usesFor: product.usesFor,
         SubCategory: product.SubCategory,
+        descriptionLong: descriptionLong,
+        promotion: {}
       };
       const result = await Models.Product.findByIdAndUpdate(product._id, newvalues, { new: true });
       return { message: 'thành công Update có ảnh mới' };
@@ -43,6 +45,8 @@ const ProductDAO = {
         Brand: product.Brand,
         usesFor: product.usesFor,
         SubCategory: product.SubCategory,
+        descriptionLong: descriptionLong,
+        promotion: {}
       };
       const result = await Models.Product.findByIdAndUpdate(product._id, newvalues, { new: true });
       // console.log(newvalues, result)
@@ -52,6 +56,10 @@ const ProductDAO = {
 
 
 
+  },
+  async updatePromotion(promotion, productList) {
+    const result = await Models.Product.updateMany({ _id: { $in: productList } }, { promotion: promotion });
+    return { message: 'thành công Update promotion' };
   },
   async delete(_id) {
     const result = await Models.Product.findOneAndDelete({ _id: _id });
@@ -83,6 +91,11 @@ const ProductDAO = {
 
   async selectByCatID(_cid) {
     const query = { 'category._id': _cid };
+    const products = await Models.Product.find(query).exec();
+    return products;
+  },
+  async selectByCategoryID(_cid) {
+    const query = { 'SubCategory.idcategory': _cid };
     const products = await Models.Product.find(query).exec();
     return products;
   },

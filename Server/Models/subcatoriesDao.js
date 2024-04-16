@@ -7,6 +7,11 @@ const SubCategoryDAO = {
         const subcategory = await Models.SubCategory.find(query).exec();
         return subcategory;
     },
+    async selectByIDCategory(_id) {
+        const query = { 'idcategory': _id };
+        const SubCategory = await Models.SubCategory.find(query).exec();
+        return SubCategory;
+    },
     async insert(subcategory) {
         const mongoose = require('mongoose');
         subcategory._id = new mongoose.Types.ObjectId();

@@ -1,5 +1,5 @@
 const cloudinary = require('cloudinary').v2;
-const { uploadCloud, uploadCloudSubcate, uploadCloudBrand, uploadCloudProduct } = require('../untils/UploadFileImgCloud.js')
+const { uploadCloud, uploadCloudSubcate, uploadCloudBrand, uploadCloudProduct, uploadCloudUser } = require('../untils/UploadFileImgCloud.js')
 const express = require('express');
 const router = express.Router();
 // utils
@@ -15,7 +15,6 @@ const subcategoriesDao = require('../Models/subcatoriesDao.js')
 const EmailUtil = require('../untils/EmailUtil.js');
 const BrandDAO = require('../Models/BrandDao.js')
 const SubCategoryDAO = require('../Models/subcatoriesDao.js');
-
 const CryptoUtil = require('../untils/CryptoUtil.js');
 
 
@@ -36,7 +35,6 @@ router.post('/login', async function (req, res) {
     res.json({ success: false, message: 'Please input username and password' });
   }
 });
-
 router.get('/token', JwtUtil.checkToken, function (req, res) {
   const token = req.headers['x-access-token'] || req.headers['authorization'];
   res.json({ success: true, message: 'Token is valid', token: token });
@@ -47,7 +45,6 @@ router.get('/brand', JwtUtil.checkToken, async function (req, res) {
   res.json(Brand)
 })
 router.post('/brand', JwtUtil.checkToken, uploadCloudBrand.single('file'), async function (req, res) {
-  // console.log(req.body)
   const name = req.body?.name;
   const image = req.file;
   const BrandOrigin = req.body.BrandOrigin;
@@ -224,9 +221,20 @@ router.get('/products', JwtUtil.checkToken, async function (req, res) {
   const result = { products: products, noPages: noPages, curPage: curPage };
   res.json(result);
 });
+router.put('/products/promotion', JwtUtil.checkToken, async function (req, res) {
+  // console.log(req.body)
+  const startDate = req.body.startDate
+  const endDate = req.body.endDate
+  const discountPercent = req.body.discountPercent
+  const productID = req.body.product
+  const newpromotion = {
+    startDate: startDate, endDate: endDate, discountPercent: discountPercent
+  }
+  const result = await ProductDAO.updatePromotion(newpromotion, productID);
+  // console.log(result)
+  res.json({ success: true, message: result });
 
-
-
+});
 router.post('/products', JwtUtil.checkToken, uploadCloudProduct.single('file'), async function (req, res) {
   console.log('body', req.body)
   const name = req.body?.name;
@@ -235,7 +243,9 @@ router.post('/products', JwtUtil.checkToken, uploadCloudProduct.single('file'), 
   const sideEffects = req.body?.sideEffects;
   const usesFor = req.body?.usesFor;
   const description = req.body?.description;
+  const descriptionLong = req.body?.descriptionLong;
   const howUse = req.body?.howUse;
+
   if (req.body?.SubCategory) {
     var SubCategory = JSON.parse(req.body?.SubCategory);
   }
@@ -248,10 +258,9 @@ router.post('/products', JwtUtil.checkToken, uploadCloudProduct.single('file'), 
   const product = {
     name: name, price: price, image: Image,
     cdate: now, quantity: quantity, sideEffects: sideEffects, usesFor: usesFor,
-    description: description, SubCategory: SubCategory, Brand: Brand, howUse: howUse
+    description: description, descriptionLong: descriptionLong, SubCategory: SubCategory, Brand: Brand, howUse: howUse,
+    promotion: {}
   };
-
-
 
   try {
     const result = await ProductDAO.insert(product);
@@ -321,8 +330,21 @@ router.delete('/products/:id', JwtUtil.checkToken, async function (req, res) {
 
 });
 
+// promotion
+router.get('/promotion', JwtUtil.checkToken, async function (req, res) {
+  // get data
+  var promotion = await promotionDao.selectAll();
 
+  res.json(promotion);
+});
+router.post('/promotion', JwtUtil.checkToken, async function (req, res) {
+  console.log(req.body)
+  const now = new Date().getTime(); // milliseconds
+  const promotion = {
 
+  };
+
+});
 
 // ORDERs
 router.get('/orders', JwtUtil.checkToken, async function (req, res) {
@@ -345,26 +367,37 @@ router.put('/orders/status/:id', JwtUtil.checkToken, async function (req, res) {
 });
 
 // cusstomer
-router.post('/customers/singup', JwtUtil.checkToken, uploadCloudProduct.none(), async function (req, res) {
+router.post('/customers/singup', JwtUtil.checkToken, uploadCloudProduct.single('file'), async function (req, res) {
 
   const username = req.body.username;
   const password = req.body.password;
   const active = req.body.active;
   const phone = req.body.phone;
   const email = req.body.email;
+  const role = req.body.role;
   console.log('body', req.body)
-  console.log(username, password, active, phone, email)
+  const Image = req.file;
   const dbCust = await CustomerDAO.selectByUsernameOrEmail(username, email);
   if (dbCust) {
     res.json({ success: false, message: 'Exists username or email' });
   } else {
     const now = new Date().getTime(); // milliseconds
     const token = CryptoUtil.md5(now.toString());
-    // const newCust = { username: username, password: password, name: name, phone: phone, email: email, image: image, active: 0, token: token };
-    const newCust = { username: username, password: password, phone: phone, email: email, active: active, token: token };
-    const result = await CustomerDAO.insert(newCust);
-    if (result) {
-      res.json({ message: 'Hoàn thành thêm mới user' });
+    try {
+      if (Image) {
+        const newCust = { role: role, image: Image, username: username, password: password, phone: phone, email: email, active: active, token: token };
+        const result = await CustomerDAO.insert(newCust);
+        res.json({ success: true, message: 'Thêm người dùng thành công', result });
+      } else {
+        const newCust = { role: role, image: Image, username: username, password: password, phone: phone, email: email, active: active, token: token };
+        const result = await CustomerDAO.insert(newCust);
+        res.json({ success: true, message: 'Thêm người dùng thành công', result });
+      }
+    } catch (err) {
+      if (Image) {
+        cloudinary.uploader.destroy(Image.filename)
+        res.json({ success: false, message: 'Thêm người dùng không thành công', result });
+      }
     }
   };
 });
@@ -381,13 +414,39 @@ router.get('/customers', JwtUtil.checkToken, async function (req, res) {
   const customers = await CustomerDAO.selectAll();
   res.json(customers);
 });
-router.put('/customers/:cid', JwtUtil.checkToken, async function (req, res) {
-  console.log(req.params)
-  const _id = req.params.cid;
-  const token = req.body.token;
-  const result = await CustomerDAO.DeleteByID(_id);
-  res.json({ success: true, message: 'Xóa thành công' });
+router.put('/customers/:id', JwtUtil.checkToken, uploadCloudUser.single('file'), async function (req, res) {
+  const _id = req.params.id;
+  const body = req.body
+  const email = req.body.email;
+  const password = req.body.password;
+  const active = req.body.active;
+  const role = req.body.role;
+  const oldImage = req.body.oldImage;
+  const username = req.body.username;
+  const phone = req.body.phone;
+
+  console.log(req.body)
+  console.log(req.file)
+  const now = new Date().getTime();
+  if (req.file) {
+    const imagenew = req.file;
+    if (imagenew) {
+      if (oldImage !== "") {
+        cloudinary.uploader.destroy(oldImage)
+      }
+      const newCust = { _id: _id, role: role, image: imagenew, username: username, password: password, phone: phone, email: email, active: active };
+      const result = await CustomerDAO.update(newCust);
+      res.json({ success: true, message: 'Update user thành công' });
+    }
+  } else {
+    const newCust = { _id: _id, role: role, username: username, password: password, phone: phone, email: email, active: active };
+    const result = await CustomerDAO.update(newCust);
+    res.json({ success: true, message: 'Update user không thành công ' });
+
+  }
 });
+
+
 router.get('/orders/customer/:cid', JwtUtil.checkToken, async function (req, res) {
   const _cid = req.params.cid;
   const orders = await OrderDao.selectByCustID(_cid);

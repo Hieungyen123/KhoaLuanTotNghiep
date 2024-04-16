@@ -10,13 +10,18 @@ class MyProvider extends Component {
       // variables
       token: '',
       userName: '',
+
+      rowSelectionModel: [],
+      setRowSelectionModel: this.setRowSelectionModel,
       setToken: this.setToken,
       setUserName: this.setUserName,
       SetnotifySuccess: this.SetnotifySuccess,
       SetnotifyWarning: this.SetnotifyWarning,
     };
   }
-
+  setRowSelectionModel = (value) => {
+    this.setState({ rowSelectionModel: value });
+  }
   setToken = (value) => {
     this.setState({ token: value });
   };
