@@ -25,6 +25,7 @@
   color: white;
   z-index: 200;
   flex-direction: column;
+  gap: 10px;
   .Top {
     .Left {
       width: 100%;
@@ -59,6 +60,9 @@
       .Info {
         display: flex;
         gap: 10px;
+        width: 200px;
+        // align-items: center;
+        justify-content: center;
         a {
           font-weight: 500;
           color: var(--Light-Gray);
@@ -67,6 +71,11 @@
           &:hover {
             color: var(--Gray);
           }
+        }
+        .user-bar {
+          display: flex;
+          align-items: center;
+          gap: 10px;
         }
         .center {
           width: 1px;
@@ -88,12 +97,12 @@
       width: 500px;
       background-color: white;
       padding: 10px;
-      height: 50px;
+      height: 40px;
       border-radius: 30px;
       input {
         margin: 0;
         font-size: 16px;
-        height: 80%;
+        height: 70%;
         // border-radius: 30px;
         width: 90%;
         border: none !important;
@@ -116,16 +125,46 @@
     }
     .Shopping-cart {
       .icon {
-        padding: 10px;
+        padding: 5px;
         border-radius: 50%;
-        font-size: 40px;
+        font-size: 35px;
+
         &:hover {
           cursor: pointer;
-          color: var(--MainColor);
+          color: var(--MainColor) !important;
           background-color: white;
         }
       }
       position: relative;
+      .lengthCart {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 0;
+        background-color: #fa8c16;
+        color: white;
+        text-align: center;
+        right: -5px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        font-size: 12px;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+@media (max-width: 700px) {
+  .Content {
+    .Bottom {
+      .Input {
+        padding: 0;
+        input {
+          padding: 10px;
+        }
+      }
     }
   }
 }

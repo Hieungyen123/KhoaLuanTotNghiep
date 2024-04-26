@@ -73,18 +73,19 @@ const ProductDAO = {
   },
   async selectTopHot(top, id) {
     const items = await Models.Order.aggregate([
-      { $match: { status: 'APPROVED' } },
+      { $match: { status: 'PENDING' } },
       { $unwind: '$items' },
       { $group: { _id: '$items.product._id', sum: { $sum: '$items.quantity' } } },
       { $sort: { sum: -1 } }, // descending
       { $limit: top }
     ]).exec();
     var products = [];
+    // console.log('items', items)
 
     for (const item of items) {
-      const query = { '_id': item._id, 'SubCategory._id': id };
-      const product = await ProductDAO.find(query);
-      products.push(product);
+      const query = { '_id': item._id, 'SubCategory.idcategory': id };
+      const product = await Models.Product.find(query).exec();
+      products.push(...product);
     }
     return products;
   },
@@ -97,6 +98,13 @@ const ProductDAO = {
   async selectByCategoryID(_cid) {
     const query = { 'SubCategory.idcategory': _cid };
     const products = await Models.Product.find(query).exec();
+    return products;
+  },
+  async selectBySubCategoryID(cid) {
+
+    const query = { 'SubCategory._id': cid };
+    const products = await Models.Product.find(query).exec();
+
     return products;
   },
   async selectAll() {

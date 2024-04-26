@@ -5,6 +5,9 @@ import Register from "./Page/Register/Register"
 import ProductDetail from "./Page/ProductDetail/ProductDetail"
 import CartDetail from "./Page/CartDetail/CartDetail"
 import ProductCategory from "./Page/productCategory/ProductCategory"
+import ProductSubcate from "./Page/ProductSubcate/ProductSubcate"
+import DoneChecKout from "./Page/DoneChecKout/DoneChecKout"
+
 export const MainRoute = [
     {
         path: "/home",
@@ -34,6 +37,15 @@ export const MainRoute = [
         path: "/product-category/:id",
         element: <ProductCategory />
     },
+    {
+        path: "/product-subcategory/:id",
+        element: <ProductSubcate />
+    },
+    {
+        path: "/done-checkout",
+        element: <DoneChecKout />
+    },
+
 ]
 export const NavRoute = [
     {

@@ -5,6 +5,7 @@ import classNames from "classnames/bind";
 import styles from './CartDetail.module.scss'
 import { Link } from "react-router-dom";
 import MyContext from "../../contexts/MyContext";
+import { useNavigate } from "react-router-dom";
 
 
 import AddIcon from '@mui/icons-material/Add';
@@ -14,24 +15,27 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import emptyCart from '../../IMG/empty-cart.png'
 
 import SVG from '../../SVG';
+import axios from 'axios';
 
 import CartUtil from '../../ultils/CartUtil';
+import PersonPinCircleOutlinedIcon from '@mui/icons-material/PersonPinCircleOutlined';
+import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
 const CartDetail = () => {
     const cx = classNames.bind(styles)
+    const navigate = useNavigate();
 
     const Context = useContext(MyContext);
-    const { mycart, customer } = Context
-    // console.log('Cart', mycart)
-    // console.log('user', customer)
-
+    const { mycart, customer, SetnotifyWarning } = Context
 
     const [total, setTotal] = useState(0);
     const [totalDiscount, setTotalDiscount] = useState(0);
     const [finalTotal, setFinalTotal] = useState(0);
-
-
     const [selectedProductCheckout, setSelectedProductCheckout] = useState([]);
     const [quantity, setQuantity] = useState(1)
+    const [addressSelected, setAddressSelected] = useState(customer !== null && customer?.Address.length > 0 ? customer.Address[0] : [])
+
+    // console.log('customer', customer)
+    // console.log('addressSelected', addressSelected)
 
     const handleCheckboxChange = (event, value) => {
         if (event.target.checked) {
@@ -60,8 +64,8 @@ const CartDetail = () => {
             }
         })
     }
-    const handeltotalAfterDiscount = CartUtil.getTotalWithDiscount(selectedProductCheckout)
 
+    const handeltotalAfterDiscount = CartUtil.getTotalWithDiscount(selectedProductCheckout)
     const totalProduct = CartUtil.getTotal(selectedProductCheckout)
 
     useEffect(() => {
@@ -70,6 +74,42 @@ const CartDetail = () => {
         setFinalTotal(total - (total - totalDiscount))
     }, [selectedProductCheckout, quantity, total])
 
+
+    const checkMoMo = () => {
+        const config = {
+            headers: { 'x-access-token': Context.token }
+        }
+        axios.post('/api/customer/payment', config).then((res) => {
+            const result = res.data;
+            console.log(res)
+            window.location.assign(res.data.payUrl);
+        })
+    }
+    const checkout = () => {
+        if (selectedProductCheckout.length > 0) {
+            if (customer !== null) {
+                const body = { total: finalTotal, items: selectedProductCheckout, customer: customer, address: {} };
+                const config = { headers: { 'x-access-token': Context.token } };
+                axios.post('/api/customer/checkout', body, config).then((res) => {
+                    const result = res.data;
+                    if (result) {
+                        Context.SetnotifySuccess('Bạn đã đặt hàng thành công.')
+                        Context.setMycart([]);
+                        navigate('/home')
+                    } else {
+                        Context.SetnotifyWarning('Đã có lỗi gì đó với giỏ hàng của bạn.')
+                    }
+                });
+            } else {
+                SetnotifyWarning('Mời bạn đăng nhập trước khi thanh toán')
+            }
+
+        } else {
+
+            SetnotifyWarning('Bạn chưa chọn sản phẩm để thanh toán')
+        }
+
+    }
 
 
     if (mycart.length > 0) {
@@ -90,7 +130,6 @@ const CartDetail = () => {
                             <div></div>
                             <div style={{ width: '200px' }}>name</div>
                             <div style={{ marginLeft: '20px' }}>Price and quantity</div>
-
                             <div ></div>
                         </div>
 
@@ -144,9 +183,37 @@ const CartDetail = () => {
                         })
                         }
                     </div>
+                    {customer?.Address.length > 0 && <div className={cx('Customer-Address')} >
+                        <div className={cx('Address')}>
+                            <div className={cx('title')}>
+                                <div className={cx('title-icon')}>
+                                    <PersonPinCircleOutlinedIcon className={cx('icon')} />
+                                    <h3>Địa chỉ giao hàng</h3>
+                                </div>
+                                <div className={cx('Choose-Address')}>
+                                    <p>Thay đổi</p>
+                                </div>
+                            </div>
+                            <div className={cx('Show-Address')}>
+                                <h3>{addressSelected.street}</h3>
+                                <p> {addressSelected.wards.full_name} , huyện {addressSelected.districts.full_name} , {addressSelected.city.full_name} </p>
+                            </div>
+                        </div>
+                        <div className={cx('Customer')}>
+                            <div className={cx('title')}>
+                                <PermIdentityOutlinedIcon className={cx('icon')} />
+                                <p>{addressSelected.name}</p> |
+                                <span>{addressSelected.phone}</span>
+                            </div>
+                            <div className={cx('Show-Address')}>
+                                <p>Ghi chú: Không bắt buộc</p>
+                                <textarea style={{ width: '100%', height: '50px' }} type='text' placeholder='Ví dụ: Hãy ấy ấy cho tôi trước khi giao 15p' />
+                            </div>
+                        </div>
+                    </div>}
+
                 </div>
                 <div className={cx('detail-cart-checkkout')}>
-
                     <div className={cx('detail-cart-checkkout-content')}>
                         <div className={cx('detail-cart-checkkout-content-item')}>
                             <div className={cx('item')}>
@@ -173,7 +240,7 @@ const CartDetail = () => {
                             </div>
 
                             <div className={cx('btn-checkout')}>
-                                <button>Tính tiền</button>
+                                <button onClick={() => checkout()} >Tính tiền</button>
                                 <p>Bằng việc tiến hành đặt mua hàng, bạn đồng ý với
                                     Điều khoản dịch vụ, Chính sách thu thập và xử lý dữ liệu cá nhân</p>
                             </div>
@@ -181,7 +248,7 @@ const CartDetail = () => {
                     </div>
                     <div className={cx('detail-cart-checkkout-SVG')}>{SVG.checkkout}</div>
                 </div>
-            </div>
+            </div >
         )
     } else {
         return (

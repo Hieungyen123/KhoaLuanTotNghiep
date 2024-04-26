@@ -10,7 +10,19 @@ const Footer = () => {
 
     return (
         <div className={cx("Footer")}>
-            Footer
+            <p>© 2024 Công ty Cổ Phần Thiết Bị Y Tế Số ĐKKD .......... cấp ngày ../../.... tại ..............</p>
+            <div className={cx("content")}>
+                <ul>
+                    <li><p>Địa chỉ:................ TP. HCM</p></li>
+                    <li>
+                        Số điện thoại: ...........&nbsp;
+                    </li>
+                    <li>
+                        Email: ....................
+                    </li>
+                    <li>Người quản lý nội dung: Nguyễn Công Hiệu</li>
+                </ul>
+            </div>
         </div>
     )
 }

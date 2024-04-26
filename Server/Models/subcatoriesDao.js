@@ -54,7 +54,7 @@ const SubCategoryDAO = {
 
     //product
     async selectByID(_id) {
-        const SubCategory = await Models.SubCategory.findById(_id).exec();
+        const SubCategory = await Models.SubCategory.find({ _id: _id }).exec();
         return SubCategory;
     }
 };

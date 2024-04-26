@@ -49,13 +49,13 @@ router.post('/brand', JwtUtil.checkToken, uploadCloudBrand.single('file'), async
   const image = req.file;
   const BrandOrigin = req.body.BrandOrigin;
   const description = req.body.description;
-  console.log(image, name, BrandOrigin, description,)
+  // console.log(image, name, BrandOrigin, description,)
   const brand = {
     name: name, image: image, description: description, BrandOrigin: BrandOrigin
   };
   try {
     const result = await BrandDAO.insert(brand);
-    // console.log(result)
+    console.log('thêm brand')
     res.json({ success: true, message: 'Thêm Brand mới thành công' });
   } catch (err) {
     if (image) {
@@ -222,7 +222,7 @@ router.get('/products', JwtUtil.checkToken, async function (req, res) {
   res.json(result);
 });
 router.put('/products/promotion', JwtUtil.checkToken, async function (req, res) {
-  // console.log(req.body)
+  console.log(req.body)
   const startDate = req.body.startDate
   const endDate = req.body.endDate
   const discountPercent = req.body.discountPercent
@@ -232,20 +232,22 @@ router.put('/products/promotion', JwtUtil.checkToken, async function (req, res) 
   }
   const result = await ProductDAO.updatePromotion(newpromotion, productID);
   // console.log(result)
-  res.json({ success: true, message: result });
+  res.json({ success: true, message: 'thành công Update promotion' });
 
 });
 router.post('/products', JwtUtil.checkToken, uploadCloudProduct.single('file'), async function (req, res) {
-  console.log('body', req.body)
+  // console.log('body', req.body)
+
   const name = req.body?.name;
   const price = parseInt(req.body?.price);
   const quantity = parseInt(req.body?.quantity);
+
   const sideEffects = req.body?.sideEffects;
   const usesFor = req.body?.usesFor;
   const description = req.body?.description;
   const descriptionLong = req.body?.descriptionLong;
   const howUse = req.body?.howUse;
-
+  console.log(name, price, quantity)
   if (req.body?.SubCategory) {
     var SubCategory = JSON.parse(req.body?.SubCategory);
   }
@@ -264,12 +266,15 @@ router.post('/products', JwtUtil.checkToken, uploadCloudProduct.single('file'), 
 
   try {
     const result = await ProductDAO.insert(product);
+    console.log('chay them product')
     // console.log(result)
     res.json({ success: true, message: 'Thêm sản phẩm thành công', result });
   } catch (err) {
+    console.log(err)
     if (Image) {
+      console.log('lỗi thêm product')
       cloudinary.uploader.destroy(Image.filename)
-      res.json({ success: false, message: 'Thêm sản phẩm không thành công', result });
+      res.json({ success: false, message: 'Thêm sản phẩm không thành công' });
     }
   }
 });
@@ -314,37 +319,23 @@ router.put('/products/:id', JwtUtil.checkToken, uploadCloudProduct.single('file'
 
 router.delete('/products/:id', JwtUtil.checkToken, async function (req, res) {
   const _id = req.params.id;
-  const image = req.body.image.filename;
+  if (req.body.image) {
+    const image = req.body.image.filename;
+    cloudinary.uploader.destroy(image, function (error, result) {
+      if (error) {
+        res.json({ success: false, message: 'Xóa sản phẩm không thành công' });
 
-  console.log(_id, image)
+      } else {
+        res.json({ success: true, message: 'Xóa sản phẩm thành công' });
+
+      }
+    });
+  }
   const resultProduct = await ProductDAO.delete(_id);
-  cloudinary.uploader.destroy(image, function (error, result) {
-    if (error) {
-      res.json({ success: false, message: 'Xóa sản phẩm không thành công' });
-
-    } else {
-      res.json({ success: true, message: 'Xóa sản phẩm thành công' });
-
-    }
-  });
+  res.json({ success: false, message: 'Xóa sản phẩm thành công' });
 
 });
 
-// promotion
-router.get('/promotion', JwtUtil.checkToken, async function (req, res) {
-  // get data
-  var promotion = await promotionDao.selectAll();
-
-  res.json(promotion);
-});
-router.post('/promotion', JwtUtil.checkToken, async function (req, res) {
-  console.log(req.body)
-  const now = new Date().getTime(); // milliseconds
-  const promotion = {
-
-  };
-
-});
 
 // ORDERs
 router.get('/orders', JwtUtil.checkToken, async function (req, res) {

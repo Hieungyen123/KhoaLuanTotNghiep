@@ -1,7 +1,7 @@
 
 require('../untils/MongoUnil');
 const Models = require('./module.js')
-
+var mongoose = require('mongoose');
 const CustomerDAO = {
   async selectByUsernameOrEmail(username, email) {
     const query = { $or: [{ username: username }, { email: email }] };
@@ -15,16 +15,25 @@ const CustomerDAO = {
     return result;
   },
   async insert(customer) {
-    const mongoose = require('mongoose');
     customer._id = new mongoose.Types.ObjectId();
     const result = await Models.Customer.create(customer);
     return result;
   },
   async active(_id, token, active) {
+    console.log(_id)
     const query = { _id: _id, token: token };
     const newvalues = { active: active };
-    const result = await Models.Customer.findOneAndUpdate(query, newvalues, { new: true });
-    return result;
+    try {
+      const result = await Models.Customer.findOneAndUpdate(query, newvalues, { new: true });
+      if (!result) {
+        return { message: 'không tìm thấy user' }
+      }
+      return result
+    } catch (err) {
+      return err;
+    }
+
+
   },
   async selectByEmail(email) {
     const query = { email: email };
@@ -57,6 +66,54 @@ const CustomerDAO = {
       // console.log(newvalues, result)
       // return newvalues
       return { message: 'thành công Sửa user có ảnh mới' };
+    }
+  },
+  async updateClientCustomer(customer) {
+    if (customer.image) {
+      const newvalues = {
+        username: customer.username,
+        Gender: customer.Gender,
+        image: customer.image,
+      };
+      const result = await Models.Customer.findByIdAndUpdate(customer._id, newvalues, { new: true });
+      return { message: 'thành công Sửa user có ảnh mới' };
+    } else {
+      const newvalues = {
+        username: customer.username,
+        Gender: customer.Gender,
+      };
+      const result = await Models.Customer.findByIdAndUpdate(customer._id, newvalues, { new: true });
+      // console.log(newvalues, result)
+      // return newvalues
+      return { message: 'thành công Sửa user' };
+    }
+  },
+  async updateClientCustomerPassWord(customer) {
+    const newvalues = {
+      password: customer.password,
+    };
+    const result = await Models.Customer.findByIdAndUpdate(customer._id, newvalues, { new: true });
+    return { message: 'Cập nhật thành công mật khẩu' };
+  },
+  async PostAddress(address, id) {
+    address._id = new mongoose.Types.ObjectId();
+    const result = await Models.Customer.findByIdAndUpdate(id, { $push: { Address: address } }, { new: true });
+    console.log(result)
+    return { message: 'Thêm thành công địa chỉ' };
+  },
+  async PutUpdateAddress(address, idcustomer, idAddress) {
+    try {
+      const result = await Models.Customer.findOneAndUpdate(
+        { _id: idcustomer, 'Address._id': idAddress }, // Tìm khách hàng với ID và Address ID tương ứng
+        { $set: { 'Address.$': address } }, // Cập nhật đối tượng Address trong mảng Address
+        { new: true }
+      );
+      console.log('lỗi không tìm thấy');
+      return { message: 'Cập nhật địa chỉ thành công' };
+    } catch (error) {
+      console.log('lỗi')
+      // Xử lý lỗi nếu có
+      return { error: 'Đã xảy ra lỗi trong quá trình cập nhật địa chỉ' };
     }
   },
   async selectAll() {

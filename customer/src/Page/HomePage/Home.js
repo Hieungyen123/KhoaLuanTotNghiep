@@ -29,6 +29,7 @@ import axios from 'axios';
 
 // import refreshAccessToken from '../../components/CheckToken/CheckToken';
 import Slider from "react-slick";
+import { useLocation } from 'react-router-dom';
 
 import img1 from '../../Slide/Image1.webp'
 import img2 from '../../Slide/Image2.webp'
@@ -36,6 +37,7 @@ import img3 from '../../Slide/Image3.webp'
 import img4 from '../../Slide/Image4.webp'
 import img5 from '../../Slide/Image5.webp'
 import img6 from '../../Slide/Image6.webp'
+import img7 from '../../Slide/Image7.webp'
 const Home = () => {
 
     const cx = classNames.bind(styles)
@@ -123,7 +125,7 @@ const Home = () => {
         } catch {
         }
     }, [])
-    console.log(products)
+    // console.log(products)
     console.log('home render')
     return (
         <div className={cx("Home")}>
@@ -160,17 +162,7 @@ const Home = () => {
                 <div className={cx("Right")}>
                     <div className={cx("Right-image")}>
                         <img src={img5} alt="err" />
-                    </div>
-                    <div className={cx("Right-content")}>
-                        <div className={cx("Right-content-item")}>
-                            Cần mua thuốc
-                        </div>
-                        <div className={cx("Right-content-item")}>
-                            Cần mua thuốc
-                        </div>
-                        <div className={cx("Right-content-item")}>
-                            Cần mua thuốc
-                        </div>
+                        <img src={img7} alt="err" />
                     </div>
                 </div >
             </section>

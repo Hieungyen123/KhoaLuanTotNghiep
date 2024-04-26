@@ -236,26 +236,7 @@
       }
     }
   }
-  .ProductDetail-content-History-Product {
-    margin-bottom: 50px;
-    width: 100%;
-    height: 380px;
-    // height: auto;
 
-    .ProductDetail-content-History-Product-title {
-      margin-bottom: 20px;
-      color: #5680e9;
-    }
-    .ProductDetail-content-History-Product-List {
-      overflow-x: scroll; /* Cho phép cuộn ngang */
-      // white-space: nowrap; /* Ngăn các Card xuống dòng */
-      // width: 300px;
-      width: 100%;
-      padding: 10px;
-      display: flex;
-      gap: 20px;
-    }
-  }
   .ProductDetail-content-Rating {
     border-radius: 20px;
     margin-bottom: 50px;
@@ -441,6 +422,12 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            .Comment-content-icon-More {
+              transform: rotate(90deg);
+              :hover {
+                cursor: pointer;
+              }
+            }
           }
         }
         .Comment-content-more {

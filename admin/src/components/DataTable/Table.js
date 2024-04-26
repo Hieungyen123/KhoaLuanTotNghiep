@@ -28,7 +28,7 @@ const Table = ({ promotion, columns, rows, fetchData, update, urlDelete, fortabl
 
 
 
-    console.log('Các hàng đã chọn:', Context.rowSelectionModel);
+    // console.log('Các hàng đã chọn:', Context.rowSelectionModel);
 
 
     const handleOpen = () => {
@@ -169,7 +169,7 @@ const Table = ({ promotion, columns, rows, fetchData, update, urlDelete, fortabl
                         quickFilterProps: { debounceMs: 500 }
                     }
                 }}
-                getRowId={(rows) => rows._id}
+                getRowId={(rows) => rows?._id}
                 pageSizeOptions={[6]}
                 checkboxSelection={promotion ? true : false}
                 disableRowSelectionOnClick

@@ -5,14 +5,19 @@
   // align-items: center;
   gap: 30px;
   margin: 50px 0;
+  height: auto;
   .detail-cart-content {
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
     border-radius: 10px;
-    padding: 10px;
     max-width: 900px;
     min-width: 650px;
-    background-color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     .detail-cart-content-items {
+      padding: 10px;
+
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+      background-color: white;
       display: flex;
       flex-direction: column;
       // align-items: center  ;
@@ -111,6 +116,87 @@
         }
       }
     }
+    .Customer-Address {
+      padding: 20px;
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+      background-color: white;
+      width: 100%;
+      height: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      .Address {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        .title {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          .title-icon {
+            color: #1250dc;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            .icon {
+              font-size: 30px;
+            }
+          }
+          .Choose-Address {
+            p {
+              color: #1250dc;
+              font-size: 14px;
+              font-weight: 500;
+            }
+          }
+        }
+        .Show-Address {
+          padding: 0 35px;
+          p {
+            color: #657384;
+          }
+        }
+      }
+      .Customer {
+        display: flex;
+        // align-items: center;
+        flex-direction: column;
+        gap: 10px;
+        .title {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          .icon {
+            color: #1250dc;
+            font-size: 30px;
+          }
+          span {
+            color: #657384;
+          }
+          p {
+            font-weight: 500;
+          }
+        }
+        .Show-Address {
+          margin-left: 30px;
+          border: 1px solid #c1c8d1;
+          padding: 10px;
+          border-radius: 10px;
+          p {
+            font-size: 12px;
+            color: #657384;
+          }
+          textarea {
+            border: none;
+            outline: none;
+            font-size: 14px;
+            width: 100%;
+            height: 100px;
+            resize: none;
+          }
+        }
+      }
+    }
   }
   .detail-cart-checkkout {
     // box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
@@ -128,7 +214,7 @@
       .detail-cart-checkkout-content-item {
         margin-bottom: 10px;
         .item {
-          padding: 8% 0;
+          padding: 8px 0;
           display: flex;
           justify-content: space-between;
           margin-top: 8px;
@@ -179,4 +265,54 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+@media (max-width: 1100px) {
+  .detail-cart {
+    // height: 600px;
+    flex-direction: column;
+    .detail-cart-content {
+      max-width: none;
+      .detail-cart-content-items {
+        .detail-cart-content-item-title {
+          display: none;
+        }
+      }
+    }
+    .detail-cart-checkkout {
+      box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+
+      max-width: none;
+      .detail-cart-checkkout-content {
+        // padding: 0 20px;
+
+        .detail-cart-checkkout-content-item {
+          height: auto;
+          overflow: hidden;
+          .item {
+            padding: 0;
+          }
+        }
+        .detail-cart-checkkout-content-item-checkout {
+          display: flex;
+          height: 60px;
+          justify-content: space-between;
+          .total {
+            // justify-content: space-between;
+            gap: 10px;
+          }
+          .btn-checkout {
+            width: 120px;
+            p {
+              display: none;
+            }
+          }
+        }
+      }
+      .detail-cart-checkkout-SVG {
+        display: none;
+        // width: 100%;
+      }
+    }
+  }
 }

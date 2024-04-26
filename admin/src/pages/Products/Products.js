@@ -26,7 +26,7 @@ const Products = () => {
     const [brand, setBrand] = useState([]);
     const [startDate, setStartDate] = useState(dayjs(new Date()));
     const [endDate, setEndDate] = useState(dayjs(new Date()));
-    const [inputpersentage, setInputpersentage] = useState(0);
+    const [inputpersentage, setInputpersentage] = useState();
 
 
 
@@ -49,9 +49,10 @@ const Products = () => {
                 // setProducts(result.products);
                 Context.SetnotifySuccess(result.message)
                 handleOpenPromotion();
+                setInputpersentage()
             });
         } else {
-            Context.SetnotifyWarning('hong được a kiểm tra lại thiếu gì hong')
+            Context.SetnotifyWarning('Chưa chọn sản phẩm để thêm a')
         }
 
     }
@@ -130,7 +131,7 @@ const Products = () => {
             headerName: 'image',
             width: 200,
             type: 'image',
-            renderCell: (params) => <img src={params.value.path} style={{ width: '100px', objectFit: 'cover' }} />
+            renderCell: (params) => <img src={params?.value?.path} style={{ width: '100px', objectFit: 'cover' }} />
         },
         {
             field: 'quantity',
@@ -141,13 +142,13 @@ const Products = () => {
             field: 'Brand',
             headerName: 'Brand',
             width: 200,
-            renderCell: (params) => <div title={params.value.name} > {params.value.name}</div>
+            renderCell: (params) => <div title={params?.value?.name} > {params?.value?.name}</div>
         },
         {
             field: 'SubCategory',
             headerName: 'Category',
             width: 200,
-            renderCell: (params) => <div title={params.value.name}> {params.value.name}</div>
+            renderCell: (params) => <div title={params?.value?.name}> {params?.value?.name}</div>
         },
     ];
     const columnsNew = [

@@ -20,13 +20,12 @@ const SubCategorySchema = mongoose.Schema({
 const CategorySchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   name: String,
-  SubCategory: [SubCategorySchema]
 }, { versionKey: false });
 
 const CustomerSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   // username: String,
-  password: Number,
+  password: String,
   username: String,
   phone: Number,
   email: String,
@@ -35,11 +34,20 @@ const CustomerSchema = mongoose.Schema({
   token: String,
   role: String,
   refreshToken: String,
-  Address: Object
+  Gender: String,
+  Address: [{
+    _id: mongoose.Schema.Types.ObjectId,
+    name: String,
+    phone: Number,
+    city: Object,
+    districts: Object,
+    wards: Object,
+    street: String,
+  }]
 }, { versionKey: false });
 const CustomerCartHistorySchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  user: CustomerSchema,
+  customer: CustomerSchema,
   item: Array,
   CreatedAt: Number,
 }, { versionKey: false });
@@ -67,6 +75,7 @@ const ProductSchema = mongoose.Schema({
   caption: String,
   Brand: Object,
   SubCategory: Object,
+
   promotion: {
     startDate: Date,
     endDate: Date,
@@ -84,7 +93,15 @@ const OrderSchema = mongoose.Schema({
   status: String,
   UserID: String,
   items: [ItemSchema],
-  Address: String,
+  Address: {
+    name: String,
+    phone: Number,
+    city: Object,
+    districts: Object,
+    wards: Object,
+    street: String,
+    note: String
+  },
   ShippingMethod: String
 }, { versionKey: false });
 const CommentsSchema = mongoose.Schema({

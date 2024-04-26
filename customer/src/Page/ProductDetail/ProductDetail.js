@@ -20,15 +20,14 @@ import FormInput from '../../components/FormInput/FormInput';
 
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import userImage from '../../IMG/user.jpg'
+import HistoryProduct from '../../components/HistoryViewingProduct/HistoryProduct';
 const ProductDetail = () => {
     const cx = classNames.bind(styles)
     const Context = useContext(MyContext);
     const { customer } = Context;
     const { id } = useParams();
     const [open, setOpen] = useState(true)
-    const [openColumn, setOpenColumn] = useState(false)
-
-
+    const [openColumn, setOpenColumn] = useState('')
 
     const [product, setProduct] = useState(null)
     const [quantity, setQuantity] = useState(1)
@@ -38,10 +37,11 @@ const ProductDetail = () => {
     const [rating, setRating] = useState({ average: null, numberOfReviews: null });
     const [valuesComment, setValuesComment] = useState("");
     const [comments, setValuesComments] = useState([]);
+    const [customerRating, setCustomerRating] = useState([]);
 
 
+    console.log(comments, valuesComment)
 
-    console.log(comments)
     var savedProducts = JSON.parse(localStorage.getItem('savedProducts')) || [];
     const UseFetchProduct = () => {
         axios.get('/api/customer/product/' + id).then((res) => {
@@ -53,6 +53,7 @@ const ProductDetail = () => {
     const UseFetchRating = () => {
         axios.get('/api/customer/rating/' + id).then((res) => {
             const result = res.data;
+            setCustomerRating(result.result.filter(item => item.customerID === customer?._id));
             if (result.result.length > 0) {
                 let sum = 0;
                 for (let i = 0; i < result.result.length; i++) {
@@ -75,19 +76,17 @@ const ProductDetail = () => {
 
         })
     }
-
-
     useEffect(() => {
         try {
             if (product) {
                 // console.log(savedProducts, product.id)
                 const isProductExists = savedProducts.some((savedProduct) => (savedProduct._id === product._id));
                 // console.log('isProductExists', isProductExists)
-                if (!isProductExists && savedProducts.length < 5) {
+                if (!isProductExists && savedProducts.length < 10) {
                     savedProducts.push(product);
                     // console.log('Thêm vô vì hợp lệ')
 
-                } else if (!isProductExists && savedProducts.length >= 5) {
+                } else if (!isProductExists && savedProducts.length >= 10) {
                     savedProducts.shift();
                     savedProducts.push(product);
                     // console.log('xóa phần tử cũ thêm cái mới')
@@ -101,12 +100,12 @@ const ProductDetail = () => {
     }, [product]);
 
 
-
+    // console.log(rating)
     const onChangeComment = (e) => {
         setValuesComment(e.target.value);
     };
-    const toggleDeleteComment = (e) => {
-        setOpenColumn(!openColumn)
+    const toggleDeleteComment = (id) => {
+        setOpenColumn(id)
     };
     const toggleModal = () => {
         setModal(!modal);
@@ -150,8 +149,9 @@ const ProductDetail = () => {
         setActiveItem(item);
     };
 
-    console.log('render')
+    console.log('render ratings')
 
+    console.log(openColumn)
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -335,87 +335,80 @@ const ProductDetail = () => {
 
                         </div>
                     </div>
-                    <div className={cx("ProductDetail-content-History-Product")} >
-                        <h3 className={cx("ProductDetail-content-History-Product-title")}>Lịch sử xem sản phẩm của bạn</h3>
-                        <div className={cx("ProductDetail-content-History-Product-List")} >
-                            {savedProducts.length > 0 && savedProducts.map(product => {
-                                return (<CardSmall key={product._id} product={product} />)
-                            })}
-                        </div>
-
-                    </div>
-                    <div className={cx("ProductDetail-content-Rating")} >
-                        <h3 className={cx("ProductDetail-content-Rating-title")}>
-                            Đánh giá sản phẩm
-                            <p>({rating.numberOfReviews === null ? 0 : rating.numberOfReviews} đánh giá )</p>
-                        </h3>
-                        <div className={cx("ProductDetail-content-Rating-Content")}>
-                            <div className={cx("ProductDetail-content-Rating-Average")}>
-                                <h4>Trung Bình đánh giá</h4>
-                                <h1> {rating.average === null ? "Chưa có đánh giá  " : rating.average} <StarRateRoundedIcon className={cx("ProductDetail-content-Rating-Average-icon")} />  </h1>
-                                <button onClick={toggleModalCheckLogin} >Gửi đánh giá</button>
-                            </div>
-                            {modal && (
-                                <div className={cx('modal')}>
-                                    <div onClick={toggleModal} className={cx('overlay')}></div>
-                                    <div className={cx('modal-content')}>
-                                        <div className={cx("ProductDetail-Name")}>
-                                            <img src={product.image.path} alt="" />
-                                            <h3>{product.name}</h3>
-                                        </div>
-                                        <div className={cx("ProductDetail-content-Rating-List")}>
-                                            <StarRating UseFetchRating={UseFetchRating} toggleModal={toggleModal} customerID={customer._id} productID={product._id} />
-                                        </div>
-                                    </div>
-                                    <div className={cx('close-modal')} >
-                                        <CancelOutlinedIcon onClick={toggleModal} className={cx('icon-close')} />
-                                    </div>
+                    <HistoryProduct />
+                    <div>
+                        <div className={cx("ProductDetail-content-Rating")} >
+                            <h3 className={cx("ProductDetail-content-Rating-title")}>
+                                Đánh giá sản phẩm
+                                <p>({rating.numberOfReviews === null ? 0 : rating.numberOfReviews} đánh giá )</p>
+                            </h3>
+                            <div className={cx("ProductDetail-content-Rating-Content")}>
+                                <div className={cx("ProductDetail-content-Rating-Average")}>
+                                    <h4>Trung Bình đánh giá</h4>
+                                    <h1> {rating.average === null ? "Chưa có đánh giá  " : rating.average} <StarRateRoundedIcon className={cx("ProductDetail-content-Rating-Average-icon")} />  </h1>
+                                    {customerRating?.length === 0 ? <button onClick={toggleModalCheckLogin} >Gửi đánh giá</button> : `Đánh giá của bạn là ${customerRating[0].ratingValue} `}
                                 </div>
-
-                            )}
-                        </div>
-
-                    </div>
-                    <div className={cx("ProductDetail-content-Comments")}>
-                        <div className={cx("ProductDetail-content-Comments-title")}>
-                            <h3>Bình luận</h3>
-                        </div>
-                        <div className={cx("Input-Comment")}>
-                            <FormInput
-                                placeholder={"type your comment"}
-                                errorMessage={"It should be a valid text!"}
-                                value={valuesComment}
-                                onChange={onChangeComment}
-                            />
-                            <button onClick={handleButtonSubmitComment}>
-                                Gửi bình luận
-                            </button>
-                        </div>
-                        <div className={cx("Comment-List")}>
-
-
-
-                            {comments.length > 0 ? comments.map((comment) => {
-                                return (
-                                    <div className={cx("Comment-List-item")} key={comment._id}>
-                                        {comment.customer.image
-                                            ? <img src={comment.customer.image.path} alt="" />
-                                            : <img src={userImage} alt="" />}
-                                        <div className={cx("Comment-content")}>
-                                            <div className={cx("Comment-content-item")}>
-                                                <p><strong>{comment.customer.username}</strong></p>
-                                                {customer && customer.role === "1" && <MoreHorizIcon onClick={toggleDeleteComment} className={cx("Comment-content-icon-More")} />}
-
+                                {modal && (
+                                    <div className={cx('modal')}>
+                                        <div onClick={toggleModal} className={cx('overlay')}></div>
+                                        <div className={cx('modal-content')}>
+                                            <div className={cx("ProductDetail-Name")}>
+                                                <img src={product.image.path} alt="" />
+                                                <h3>{product.name}</h3>
                                             </div>
-                                            <p>{comment.value}</p>
+                                            <div className={cx("ProductDetail-content-Rating-List")}>
+                                                <StarRating UseFetchRating={UseFetchRating} toggleModal={toggleModal} customerID={customer._id} productID={product._id} />
+                                            </div>
                                         </div>
-                                        {openColumn &&
-                                            <div style={{ opacity: openColumn ? '100%' : 0, transform: openColumn ? 'translateX(0)' : 'translateX(-20px)' }} className={cx("Comment-content-more")}>
-                                                <button>Xóa comment</button>
+                                        <div className={cx('close-modal')} >
+                                            <CancelOutlinedIcon onClick={toggleModal} className={cx('icon-close')} />
+                                        </div>
+                                    </div>
+
+                                )}
+                            </div>
+
+                        </div>
+                        <div className={cx("ProductDetail-content-Comments")}>
+                            <div className={cx("ProductDetail-content-Comments-title")}>
+                                <h3>Bình luận</h3>
+                            </div>
+                            <div className={cx("Input-Comment")}>
+                                <FormInput
+                                    placeholder={"type your comment"}
+                                    errorMessage={"It should be a valid text!"}
+                                    value={valuesComment}
+                                    onChange={onChangeComment}
+                                />
+                                <button onClick={handleButtonSubmitComment}>
+                                    Gửi bình luận
+                                </button>
+                            </div>
+                            <div className={cx("Comment-List")}>
+                                {comments.length > 0 ? comments.map((comment) => {
+                                    return (
+                                        <div className={cx("Comment-List-item")} key={comment._id}>
+                                            {comment.customer.image
+                                                ? <img src={comment.customer.image.path} alt="" />
+                                                : <img src={userImage} alt="" />}
+                                            <div className={cx("Comment-content")}>
+                                                <div className={cx("Comment-content-item")}>
+                                                    <p><strong>{comment.customer.username}</strong></p>
+                                                    {customer?._id === comment.customer._id || customer.role === "1" ? <MoreHorizIcon onClick={(e) => toggleDeleteComment(comment._id)} className={cx("Comment-content-icon-More")} /> : null}
+
+                                                </div>
+                                                <p>{comment.value}</p>
                                             </div>
-                                        }
-                                    </div>)
-                            }) : ""}
+                                            {openColumn === comment._id ?
+                                                <div style={{ opacity: openColumn ? '100%' : 0, transform: openColumn ? 'translateX(0)' : 'translateX(-20px)' }} className={cx("Comment-content-more")}>
+                                                    <button onClick={() => setOpenColumn('')}>Tắt</button>
+                                                    <button>Xóa comment</button>
+                                                </div>
+                                                : null
+                                            }
+                                        </div>)
+                                }) : ""}
+                            </div>
                         </div>
                     </div>
                 </>

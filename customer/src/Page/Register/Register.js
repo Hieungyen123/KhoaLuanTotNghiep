@@ -91,22 +91,29 @@ const Register = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(FormData)
+        // console.log(FormData)
         axios.post('/api/customer/signup', FormData).then((res) => {
             const result = res.data;
-            // console.log(result)
-            alert(result.message)
+            console.log(result)
+            console.log('chạy')
+            if (result.success === false) {
+                alert(result.message)
+            } else {
+                alert(result.message)
+            }
+
         });
     };
+
     const handleSubmitActive = (e) => {
         e.preventDefault();
-        console.log(active)
-        const id = active.token;
-        const token = active.id;
+        // console.log(active)
+        const id = active.id;
+        const token = active.token;
         const body = { id: id, token: token };
         axios.post('/api/customer/active', body).then((res) => {
             const result = res.data;
-            // console.log(result)
+            console.log(result)
             alert(result.message)
         });
     };
@@ -144,7 +151,7 @@ const Register = () => {
                 <div className={cx("Register-Content")} style={{
 
                 }}>
-                    <h1>Register</h1>
+                    <h1>Đăng Kí</h1>
                     <form >
                         {inputs.map((input) => (
                             <FormInput
@@ -156,8 +163,8 @@ const Register = () => {
                         ))}
 
                     </form>
-                    <button onClick={handleSubmit} type='submit'>Submit</button>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '15px' }} >Already have an account? <Link style={{ color: '#5680e9', margin: 0, fontSize: '15px' }} to="/Register">SignIn</Link> or <p style={{ fontWeight: 500, color: '#5680e9' }} onClick={handleOpen}>Active Account</p></div>
+                    <button onClick={handleSubmit} type='submit'>Lưu</button>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '15px' }} >Bạn đã có tài khoản? <Link style={{ color: '#5680e9', margin: 0, fontSize: '15px' }} to="/login">Đăng nhập</Link> or <p style={{ fontWeight: 500, color: '#5680e9' }} onClick={handleOpen}>Kích hoạt tài khoản</p></div>
                 </div>
                 <Modal
                     aria-labelledby="transition-modal-title"
@@ -173,7 +180,7 @@ const Register = () => {
                     }}
                 >
                     <div style={style} >
-                        <form onSubmit={handleSubmitActive} className={cx("Active-Content")} >
+                        <form className={cx("Active-Content")} >
                             {inputsActive.map((input) => (
                                 <FormInput
                                     key={input.id}
@@ -184,7 +191,7 @@ const Register = () => {
                             ))}
 
                         </form>
-                        <button style={{ padding: '10px 15px', cursor: 'pointer', }} type='submit'>Submit</button>
+                        <button style={{ padding: '10px 15px', cursor: 'pointer', }} onClick={(e) => handleSubmitActive(e)} type='submit'>Submit</button>
                     </div>
 
                 </Modal>

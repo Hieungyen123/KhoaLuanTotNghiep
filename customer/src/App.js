@@ -1,10 +1,12 @@
-import './App.css';
+import './App.scss';
 import { BrowserRouter } from 'react-router-dom'
 import Main from './components/Main/Main';
 import MyProvider from './contexts/MyProvider.js';
 
-function App() {
 
+
+
+function App() {
 
   return (
     <MyProvider>
@@ -12,7 +14,6 @@ function App() {
         <Main />
       </BrowserRouter>
     </MyProvider>
-
   );
 }
 

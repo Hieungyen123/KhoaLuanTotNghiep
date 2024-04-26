@@ -49,12 +49,13 @@ const Nav = () => {
                             <div className={cx("Info")}>
                                 {Context.customer === undefined || Context.customer === null
                                     ? (<>
-                                        <Link to='/login'>Login</Link>
+                                        <Link to='/login'>Đăng nhập</Link>
                                         <div className={cx("center")}></div>
-                                        <Link to='/register'>Register</Link></>)
+                                        <Link to='/register'>Đăng kí</Link></>)
                                     : (
                                         <div onClick={() => { setOpen(false) }} className={cx('user-bar')}>
                                             <Link to={'/myprofile/profile/' + Context.customer._id}><AccountCircleOutlinedIcon className={cx('user-icon')} /></Link>
+                                            <p>{Context.customer.username}</p>
                                         </div>
                                     )
                                 }
@@ -71,9 +72,9 @@ const Nav = () => {
                         </div>
                         <div className={cx("Shopping-cart")} onMouseEnter={() => setOpenCart(true)}
                             onMouseLeave={() => setOpenCart(false)} >
-                            <ShoppingCartIcon className={cx("icon")}></ShoppingCartIcon>
+                            <Link to='/cartdetail'  ><ShoppingCartIcon style={{ color: 'white' }} className={cx("icon")}></ShoppingCartIcon></Link>
+                            <p style={{ display: openCart ? 'none' : 'flex' }} className={cx("lengthCart")}>{Context.mycart.length}</p>
                             <Cart openCart={openCart} setOpenCart={setOpenCart} />
-
                         </div>
                     </div>
 

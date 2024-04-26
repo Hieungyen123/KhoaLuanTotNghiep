@@ -1,5 +1,6 @@
 .cart {
   position: absolute;
+  z-index: 1100;
   border-radius: 10px;
   right: -10px;
   top: 50px;
@@ -16,6 +17,9 @@
   max-height: 600px;
   transition: all 0.3s ease-in-out;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  display: flex;
+  flex-direction: column;
+
   .null {
     transition: all 0.3s ease-in-out;
     width: 100%;

@@ -96,7 +96,7 @@ const Login = () => {
                     <button type='submit' onClick={handleSubmit}>Submit</button>
                     <Link to="#">Forget Your Password?</Link>
 
-                    <p>Already have an account? <Link to="/Register">SignIn</Link></p>
+                    <p>Dont't have an account? <Link to="/Register">SignIn</Link></p>
 
 
                 </div>

@@ -18,7 +18,11 @@ import { useEffect, useContext } from 'react';
 import axios from 'axios';
 import MyContext from '../../contexts/MyContext';
 import { useNavigate } from 'react-router-dom';
-
+import Profile from '../../Page/Profile/Profile'
+import ChangePass from '../../Page/Profile/ChangePass'
+import MyProfile from '../../Page/Profile/MyProfile'
+import MyOrder from '../../Page/Profile/MyOrder'
+import MyAddress from '../../Page/Profile/MyAddress'
 const Main = () => {
 
     const location = useLocation()
@@ -86,6 +90,15 @@ const Main = () => {
             <AnimatePresence>
                 <Routes location={location} key={location.pathname} >
                     <Route path='/' element={<Navigate replace to='/home' />} />
+
+                    <Route path="myprofile" element={<MainLayout> <Profile /></MainLayout>} >
+                        <Route path='' element={<MyProfile />} />
+                        <Route path='myorders/:cid' element={<MyOrder />} />
+                        <Route path="profile/:id" element={<MyProfile />} />
+                        <Route path="changepass" element={<ChangePass />} />
+                        <Route path="myaddress" element={<MyAddress />} />
+                    </Route>
+
                     {MainRoute.map((route, index) => {
                         return (<Route key={index} path={route.path} element={<MainLayout>{route.element}</MainLayout>} />)
                     })}

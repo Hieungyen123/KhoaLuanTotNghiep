@@ -32,16 +32,17 @@
       }
     }
     .Right {
-      padding: 5px;
-      width: 30%;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
       .Right-image {
         width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 20px;
+        padding: 5px;
         img {
           width: 100%;
-          height: 110px;
+          height: 115px;
           object-fit: cover;
           border-radius: 5px;
         }
@@ -191,6 +192,39 @@
     align-items: center;
     justify-content: center;
     .List-product {
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .Home {
+    .Main-Banner {
+      flex-direction: column;
+      .Slide {
+        width: 100%;
+      }
+      .Right {
+        .Right-image {
+          display: flex;
+          flex-direction: row;
+        }
+      }
+    }
+  }
+}
+@media (max-width: 900px) {
+  .Home {
+    padding: 10px;
+    .Main-Banner {
+      flex-direction: column;
+      .Slide {
+        width: 100%;
+      }
+      .Right {
+        .Right-image {
+          display: none;
+        }
+      }
     }
   }
 }

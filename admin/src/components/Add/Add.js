@@ -53,12 +53,17 @@ const Add = ({ columns, setOpen, slug, fetchData, url, img, categories, SubCateg
                 console.log(result)
                 if (result.success === true) {
                     Context.SetnotifySuccess(result.message)
-                    fetchData()
                     setOpen(false)
                     setLoading(false)
                 } else {
                     Context.SetnotifyWarning(result.message)
+
+                    setOpen(false)
                     setLoading(false)
+                }
+                for (let key of formData.keys()) {
+                    formData.delete(key);
+
                 }
             });
             fetchData()

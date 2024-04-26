@@ -47,10 +47,10 @@ const Card = ({ product }) => {
         <div>
             <div className={cx('Card')}>
                 <Link to={"/product/" + product._id}><img src={product.image.path} alt="Anh san pham" /></Link>
-                <addr title="quick view" onClick={toggleModal} ><VisibilityOutlinedIcon className={cx('QuickView-Icon')} /></addr>
+                <div title="quick view" onClick={toggleModal} ><VisibilityOutlinedIcon className={cx('QuickView-Icon')} /></div>
                 {Object.keys(product.promotion).length !== 0 &&
                     <div className={cx('promotion')}>
-                        <span>-10%</span>
+                        <span>{product.promotion.discountPercent}%</span>
                     </div>
                 }
                 <div className={cx('Content')}>

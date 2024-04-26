@@ -1,6 +1,6 @@
 .Card {
-  z-index: 499;
   display: flex;
+  z-index: 100;
   flex-direction: column;
   align-items: center;
   //   padding: 10px;
@@ -69,12 +69,16 @@
       align-items: center;
       justify-content: center;
       margin-top: 14px;
+
       button {
         padding: 10px 15px;
         color: white;
         background-color: #1250dc;
         border-radius: 20px;
         border: none;
+        &:hover {
+          cursor: pointer;
+        }
       }
     }
   }
