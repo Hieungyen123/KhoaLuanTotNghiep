@@ -39,8 +39,8 @@ router.post("/paymentpayos", JwtUtil.checkToken, async (req, res) => {
         price: 1000,
       }
     ],
-    cancelUrl: "http://localhost:3001/home",
-    returnUrl: "http://localhost:3001/done-checkout"
+    cancelUrl: "https://khoaluantotnghiep.onrender.com//home",
+    returnUrl: "https://khoaluantotnghiep.onrender.com//done-checkout"
   };
   const paymentLinkData = await payos.createPaymentLink(requestData);
   res.json({ url: paymentLinkData })
@@ -57,7 +57,7 @@ router.post("/paymentmomo", JwtUtil.checkToken, async (req, res) => {
   var requestId = partnerCode + new Date().getTime();
   var orderId = requestId;
   var orderInfo = "pay with MoMo";
-  var redirectUrl = "http://localhost:3001/done-checkout";
+  var redirectUrl = "https://khoaluantotnghiep.onrender.com//done-checkout";
   var ipnUrl = "https://callback.url/notify";
   // var ipnUrl = redirectUrl = "https://webhook.site/454e7b77-f177-4ece-8236-ddf1c26ba7f8";
   var amount = "50000";
