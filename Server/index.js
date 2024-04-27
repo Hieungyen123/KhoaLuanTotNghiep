@@ -41,14 +41,14 @@ var path = require('path');
 console.log('__dirname', __dirname)
 // console.log('path', path)
 // '/admin' serve the files at client-admin/build/* as static files
-app.use('/admin', express.static(path.resolve(__dirname, '../admin/public')));
+app.use('/admin', express.static(path.resolve(__dirname, '../admin/build')));
 app.get('admin/*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../admin/public', 'index.html'))
+    res.sendFile(path.resolve(__dirname, '../admin/build', 'index.html'))
 });
 // '/' serve the files at client-customer/build/* as static files
-app.use('/', express.static(path.resolve(__dirname, '../customer/public')));
+app.use('/', express.static(path.resolve(__dirname, '../customer/build')));
 app.get('/*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../customer/public', 'index.html'));
+    res.sendFile(path.resolve(__dirname, '../customer/build', 'index.html'));
 });
 
 app.listen(port, () => {
