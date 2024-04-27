@@ -24,7 +24,7 @@ import HistoryProduct from '../../components/HistoryViewingProduct/HistoryProduc
 const ProductDetail = () => {
     const cx = classNames.bind(styles)
     const Context = useContext(MyContext);
-    const { customer } = Context;
+    const { customer, mycart } = Context;
     const { id } = useParams();
     const [open, setOpen] = useState(true)
     const [openColumn, setOpenColumn] = useState('')
@@ -166,7 +166,23 @@ const ProductDetail = () => {
         fetchData();
     }, []);
 
-
+    const btnAdd2CartClick = (e, item) => {
+        e.preventDefault();
+        const quantity = 1
+        if (quantity) {
+            const index = mycart.findIndex(x => x.product._id === item._id); // check if the _id exists in mycart
+            if (index === -1) { // not found, push newItem
+                const newItem = { product: item, quantity: quantity };
+                mycart.push(newItem);
+            } else { // increasing the quantity
+                mycart[index].quantity += quantity;
+            }
+            Context.setMycart(mycart);
+            Context.SetnotifySuccess('sản phẩm đã thêm vào giỏ hàng của bạn')
+        } else {
+            Context.notifyWarning('mong bạn kiểm tra lại giúp mình số lượng')
+        }
+    }
 
     if (product) {
         var DescFull = product.descriptionLong.split('\n').map((line, index) => {
@@ -260,7 +276,7 @@ const ProductDetail = () => {
                             </div>
 
                             <div className={cx("ProductDetail-content-AddToCart")}>
-                                <button><span>Thêm vào giỏ hàng</span></button>
+                                <button onClick={(e) => btnAdd2CartClick(e, product)}><span>Thêm vào giỏ hàng</span></button>
                             </div>
                             <div className={cx("ProductDetail-content-Sub")}>
                                 <div className={cx("ProductDetail-content-Sub-item")}>

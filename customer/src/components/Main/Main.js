@@ -42,6 +42,7 @@ const Main = () => {
                         }
                     }).then((res) => {
                         const result = res.data;
+                        console.log(result)
                         Context.setToken(token);
                         Context.setCustomer(result);
                     })

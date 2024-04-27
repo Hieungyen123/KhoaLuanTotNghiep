@@ -61,7 +61,7 @@ const HistoryProduct = () => {
             <div className={cx("History-Product-List")} >
                 <Slider {...settings} style={{ borderRadius: '5px' }}>
                     {savedProducts.length > 0 && savedProducts.map(product => {
-                        return (<CardSmall key={product._id} product={product} />)
+                        return (<CardSmall key={product._id} button={true} product={product} />)
                     })}
                 </Slider>
 

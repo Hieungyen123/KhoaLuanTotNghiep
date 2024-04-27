@@ -4,7 +4,7 @@ import classNames from "classnames/bind";
 import { Link } from 'react-router-dom';
 import MyContext from "../../contexts/MyContext";
 
-const CardSmall = ({ product }) => {
+const CardSmall = ({ product, button }) => {
     const cx = classNames.bind(styles)
     const Context = useContext(MyContext);
 
@@ -35,9 +35,10 @@ const CardSmall = ({ product }) => {
                         <p className={cx('Name')}>{product.name}</p>
                         <p className={cx('Cost')}>{product.price}.000đ</p>
                     </div>
-                    <div className={cx('Cart')} onClick={(e) => btnAdd2CartClick(e, product)}>
+                    {button && <div className={cx('Cart')} onClick={(e) => btnAdd2CartClick(e, product)}>
                         <button>Thêm vào giỏ hàng</button>
-                    </div>
+                    </div>}
+
                 </div>
             </div>
         </div>

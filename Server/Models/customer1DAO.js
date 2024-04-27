@@ -96,7 +96,7 @@ const CustomerDAO = {
     return { message: 'Cập nhật thành công mật khẩu' };
   },
   async PostAddress(address, id) {
-    address._id = new mongoose.Types.ObjectId();
+    address._idAddress = new mongoose.Types.ObjectId();
     const result = await Models.Customer.findByIdAndUpdate(id, { $push: { Address: address } }, { new: true });
     console.log(result)
     return { message: 'Thêm thành công địa chỉ' };
@@ -104,8 +104,17 @@ const CustomerDAO = {
   async PutUpdateAddress(address, idcustomer, idAddress) {
     try {
       const result = await Models.Customer.findOneAndUpdate(
-        { _id: idcustomer, 'Address._id': idAddress }, // Tìm khách hàng với ID và Address ID tương ứng
-        { $set: { 'Address.$': address } }, // Cập nhật đối tượng Address trong mảng Address
+        { _id: idcustomer, 'Address._idAddress': idAddress }, // Tìm khách hàng với ID và Address ID tương ứng
+        {
+          $set: {
+            'Address.$.name': address.name,
+            'Address.$.phone': address.phone,
+            'Address.$.city': address.city,
+            'Address.$.districts': address.districts,
+            'Address.$.wards': address.wards,
+            'Address.$.street': address.street,
+          }
+        }, // Cập nhật đối tượng Address trong mảng Address
         { new: true }
       );
       console.log('lỗi không tìm thấy');

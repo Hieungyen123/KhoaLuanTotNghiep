@@ -12,7 +12,7 @@ import { debounce, throttle } from 'lodash';
 const MyAddress = () => {
     const cx = classNames.bind(styles)
     const { id } = useParams();
-    const { customer, token, SetnotifyWarning, SetnotifySuccess } = useContext(MyContext)
+    const { customer, token, SetnotifyWarning, SetnotifySuccess, setCustomer } = useContext(MyContext)
 
     const [name, setName] = useState('')
     const [phone, setPhone] = useState('')
@@ -29,6 +29,7 @@ const MyAddress = () => {
     const [checkAction, setCheckAction] = useState(false)
 
     const fetchPostAddress = () => {
+        console.log('thêm mới')
         setCheckAction(false)
         if (name && phone && city && districts && wards && street) {
             const formData = new FormData();
@@ -50,6 +51,7 @@ const MyAddress = () => {
                 setCity(null)
                 setPhone("")
                 setName("")
+
             })
         } else {
             SetnotifyWarning("Bạn chưa nhập đủ thông tin")
@@ -87,7 +89,11 @@ const MyAddress = () => {
 
     }
 
-    // console.log('districts', districts)
+
+
+
+
+
 
     const fetchApiProvinces = () => {
         axios.get('https://vnprovinces.pythonanywhere.com/api/provinces/?is_coastal=false&basic=false&limit=100').then((res) => {
@@ -126,7 +132,7 @@ const MyAddress = () => {
         setStreet(address.street)
         setName(address.name)
         setPhone(address.phone)
-        setIdAddress(address._id)
+        setIdAddress(address.idAddress)
         setTimeout(() => {
             setCheckAction(true)
             setOpenNewAddress(!openNewAddress)
@@ -171,12 +177,12 @@ const MyAddress = () => {
             <div>
                 <div className={cx('MyAddress-title')}>
                     <div><h3>Quản lý địa chỉ</h3> <p>Lưu ý: Giới hạn là 4 địa chỉ</p></div>
-                    <button onClick={handleChangeOpenNewAddress} >Thêm địa chỉ mới</button>
+                    {customer?.Address.length < 4 ? <button onClick={handleChangeOpenNewAddress} >Thêm địa chỉ mới</button> : null}
                 </div>
                 <div className={cx('MyAddress-content')}>
                     {customer !== null && customer.Address.length > 0
                         ? customer.Address.map((address) => {
-                            return (<div className={cx('MyAddress-List-Info')}>
+                            return (<div key={address._idAddress} className={cx('MyAddress-List-Info')}>
                                 <div>
                                     <div className={cx('Infos')}>
                                         <p><strong>{address.name}</strong> | {address.phone}</p>

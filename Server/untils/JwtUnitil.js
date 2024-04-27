@@ -25,9 +25,9 @@ const JwtUtil = {
     const token = req.headers['x-access-token'] || req.headers['authorization'];
     // console.log('token', token)
     if (token) {
-
       jwt.verify(token, MyConstants.JWT_SECRET, (err, decoded) => {
         if (err) {
+          console.log(err)
           return res.json({
             success: false,
             message: 'Token is not valid'
@@ -38,6 +38,7 @@ const JwtUtil = {
         }
       });
     } else {
+
       return res.json({
         success: false,
         message: 'Auth token is not supplied'

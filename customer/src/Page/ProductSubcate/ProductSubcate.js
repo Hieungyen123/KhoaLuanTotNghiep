@@ -246,7 +246,7 @@ const ProductSubcate = () => {
                     <div className={cx("List-Product")}>
                         {filteredProducts.length > 0
                             ? filteredProducts.map((item) => {
-                                return (<CardSmall key={item._id} product={item} />)
+                                return (<CardSmall key={item._id} button={true} product={item} />)
                             })
                             : 'Không có sản phẩm nào được tìm thấy'
                         }

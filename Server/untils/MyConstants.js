@@ -6,8 +6,8 @@ const MyConstants = {
   EMAIL_USER: 'nguyenconghieu05092019@gmail.com', // Microsoft mail service
   EMAIL_PASS: 'buaconhachuc1',
   JWT_SECRET: 'hieu',
-  JWT_EXPIRES: '600000',
-  JWT_EXPIRES2: '1800000', // in milliseconds
+  JWT_EXPIRES: '6000000',
+  JWT_EXPIRES2: '18000000', // in milliseconds
   CLOUDINARY_NAME: "dtjghjupr",
   CLOUDINARY_KEY: "557243119715384",
   CLOUDINARY_SECRET: "a-A5r8shtP4NqC7kRvaJJ26PCPU",

@@ -29,7 +29,7 @@ const Profile = () => {
 
     const navigate = useNavigate();
 
-    console.log(customer)
+    // console.log(customer)
     if (customer === null) {
         // SetnotifyWarning("Phiên đăng nhập của bạn đã hết hạn để truy cập")
         navigate('/home')

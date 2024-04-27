@@ -45,8 +45,6 @@ class MyProvider extends Component {
     progress: undefined,
     theme: "light",
   });
-
-
   SetnotifyWarning = (message) => toast.warn(message, {
     position: "top-center",
     autoClose: 3000,

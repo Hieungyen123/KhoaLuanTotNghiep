@@ -3,6 +3,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const MyConstants = require('../untils/MyConstants.js');
 const cloudinary = require('cloudinary').v2;
+const querystring = require('querystring');
 
 // daos
 const CategoryDAO = require('../Models/CategoryDAO.js');
@@ -21,13 +22,35 @@ const EmailUtil = require('../untils/EmailUtil.js');
 const JwtUtil = require('../untils/JwtUnitil.js');
 
 
+const PayOS = require("@payos/node");
+const payos = new PayOS("3b7309fb-505c-435a-bfdd-11778dec2258", "39f5d233-c9bb-4f9d-87d7-b843909acc55", "22cb96fec9fb1a9a2e0b1e9ee50672d037c3d00fd08604351c80c777f8c6fa15");
+
+//PayOs
+router.post("/paymentpayos", JwtUtil.checkToken, async (req, res) => {
+  console.log("payos")
+  const requestData = {
+    orderCode: 234237,
+    amount: 5000,
+    description: "Thanh toan don hang",
+    items: [
+      {
+        name: "Mì tôm hảo hảo ly",
+        quantity: 1,
+        price: 1000,
+      }
+    ],
+    cancelUrl: "http://localhost:3001/home",
+    returnUrl: "http://localhost:3001/done-checkout"
+  };
+  const paymentLinkData = await payos.createPaymentLink(requestData);
+  res.json({ url: paymentLinkData })
+});
+
+
 
 //MoMo
-
-
-router.post("/payment", uploadCloudBrand.single('file'), JwtUtil.checkToken, async (req, res) => {
+router.post("/paymentmomo", JwtUtil.checkToken, async (req, res) => {
   console.log(req.body)
-  const orderData = JSON.stringify({ "username": "momo" });
   var partnerCode = "MOMO";
   var accessKey = "F8BBA842ECF85";
   var secretkey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
@@ -35,15 +58,16 @@ router.post("/payment", uploadCloudBrand.single('file'), JwtUtil.checkToken, asy
   var orderId = requestId;
   var orderInfo = "pay with MoMo";
   var redirectUrl = "http://localhost:3001/done-checkout";
-  var ipnUrl = "https://5ab1-14-169-52-232.ngrok-free.app/momo-callback";
+  var ipnUrl = "https://callback.url/notify";
   // var ipnUrl = redirectUrl = "https://webhook.site/454e7b77-f177-4ece-8236-ddf1c26ba7f8";
-  var amount = req.body.amount * 1000;
+  var amount = "50000";
   var requestType = "captureWallet"
-  var extraData = Buffer.from(orderData).toString('base64');//pass empty value if your merchant does not have stores
+  var extraData = "" //pass empty value if your merchant does not have stores
+  const extraDataEncoded = encodeExtraData(extraData);
 
   //before sign HMAC SHA256 with format
   //accessKey=$accessKey&amount=$amount&extraData=$extraData&ipnUrl=$ipnUrl&orderId=$orderId&orderInfo=$orderInfo&partnerCode=$partnerCode&redirectUrl=$redirectUrl&requestId=$requestId&requestType=$requestType
-  var rawSignature = "accessKey=" + accessKey + "&amount=" + amount + "&extraData=" + extraData + "&ipnUrl=" + ipnUrl + "&orderId=" + orderId + "&orderInfo=" + orderInfo + "&partnerCode=" + partnerCode + "&redirectUrl=" + redirectUrl + "&requestId=" + requestId + "&requestType=" + requestType
+  var rawSignature = "accessKey=" + accessKey + "&amount=" + amount + "&extraData=" + extraDataEncoded + "&ipnUrl=" + ipnUrl + "&orderId=" + orderId + "&orderInfo=" + orderInfo + "&partnerCode=" + partnerCode + "&redirectUrl=" + redirectUrl + "&requestId=" + requestId + "&requestType=" + requestType
   //puts raw signature
   console.log("--------------------RAW SIGNATURE----------------")
   console.log(rawSignature)
@@ -82,7 +106,6 @@ router.post("/payment", uploadCloudBrand.single('file'), JwtUtil.checkToken, asy
       'Content-Length': Buffer.byteLength(requestBody)
     }
   }
-
   //Send the request and get the response
   req = https.request(options, resMoMo => {
     console.log(`Status: ${res.statusCode}`);
@@ -398,15 +421,11 @@ router.get('/token', JwtUtil.authenticateToken, async (req, res) => {
   const customer = await CustomerDAO.selectByID(req.user.id)
   return res.json(customer);
 });
-router.get('/user', JwtUtil.authenticateToken, async (req, res) => {
-  const refreshToken = req.body.refreshToken;
-  // console.log(req)
-  // const token = req.headers['x-access-token'] || req.headers['authorization'];
+router.get('/user:id', JwtUtil.checkToken, async (req, res) => {
   console.log("chạy get token")
-  // const customer = await CustomerDAO.selectByID(user.id)
-  res.sendStatus(200);
-
-
+  const _id = req.params.id;
+  const customer = await CustomerDAO.selectByID(_id)
+  return res.json(customer);
 });
 
 

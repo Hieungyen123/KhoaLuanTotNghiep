@@ -142,7 +142,7 @@ const Menu = () => {
                                             loading ? <CircularProgress /> :
                                                 hotProduct.length > 0 ?
                                                     hotProduct.map((item) => {
-                                                        return (<CardSmall key={item._id} product={item} />)
+                                                        return (<CardSmall key={item._id} button={false} product={item} />)
                                                     })
                                                     : 'Chưa có sản phẩm nào được bán trong danh sách này'
 
