@@ -235,7 +235,7 @@ const CartDetail = () => {
                         })
                         }
                     </div>
-                    {customer?.Address.length > 0 && <div className={cx('Customer-Address')} >
+                    {customer?.Address.length > 0 && addressSelected ?  <div className={cx('Customer-Address')} >
                         <div className={cx('Address')}>
                             <div className={cx('title')}>
                                 <div className={cx('title-icon')}>
@@ -247,22 +247,22 @@ const CartDetail = () => {
                                 </div>
                             </div>
                             <div className={cx('Show-Address')}>
-                                <h3>{addressSelected.street}</h3>
-                                <p> {addressSelected.wards.full_name} , huyện {addressSelected.districts.full_name} , {addressSelected.city.full_name} </p>
+                                <h3>{addressSelected?.street}</h3>
+                                <p> {addressSelected?.wards.full_name} , huyện {addressSelected?.districts.full_name} , {addressSelected?.city.full_name} </p>
                             </div>
                         </div>
                         <div className={cx('Customer')}>
                             <div className={cx('title')}>
                                 <PermIdentityOutlinedIcon className={cx('icon')} />
-                                <p>{addressSelected.name}</p> |
-                                <span>{addressSelected.phone}</span>
+                                <p>{addressSelected?.name}</p> |
+                                <span>{addressSelected?.phone}</span>
                             </div>
                             <div className={cx('Show-Address')}>
                                 <p>Ghi chú: Không bắt buộc</p>
                                 <textarea style={{ width: '100%', height: '50px' }} type='text' placeholder='Ví dụ: Hãy ấy ấy cho tôi trước khi giao 15p' />
                             </div>
                         </div>
-                    </div>}
+                    </div> : null}
 
                 </div>
                 <div className={cx('detail-cart-checkkout')}>
