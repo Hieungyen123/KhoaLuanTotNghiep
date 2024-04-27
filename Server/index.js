@@ -30,7 +30,7 @@ app.use('/api/customer', require('./api/customer.js'));
 
 
 
-app.post("receive-hook", async (req, res) => {
+app.post("https://khoaluantotnghiep.onrender.com/receive-hook", async (req, res) => {
     console.log(req.body)
 })
 
