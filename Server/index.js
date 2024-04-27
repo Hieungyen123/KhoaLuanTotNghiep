@@ -1,6 +1,6 @@
 const express = require('express')
-const app = express();
-const port = 3000;
+const app = express();;
+const port = process.env.PORT || 10000;
 const cors = require('cors');
 
 // import AccountModel
