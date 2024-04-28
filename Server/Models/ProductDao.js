@@ -116,6 +116,11 @@ const ProductDAO = {
     const query = { name: { $regex: new RegExp(keyword, "i") } };
     const products = await Models.Product.find(query).exec();
     return products;
+  },
+  async selectByKeywordInputSearch(keyword) {
+    const query = { name: { $regex: new RegExp(keyword, "i") } };
+    const products = await Models.Product.find(query).limit(3).exec();
+    return products;
   }
 
 };

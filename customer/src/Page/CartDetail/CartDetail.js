@@ -74,7 +74,13 @@ const CartDetail = () => {
         })
     }
     const toggleModal = () => {
-        setModal(!modal);
+
+        if (customer === null) {
+            SetnotifyWarning("Bạn chưa đăng nhập")
+        } else {
+            setModal(!modal);
+        }
+
     };
     const toggleModalPaymentMethod = () => {
         setModalPaymentMethod(!modalPaymentMethod);
@@ -235,7 +241,7 @@ const CartDetail = () => {
                         })
                         }
                     </div>
-                    {customer?.Address.length > 0 && <div className={cx('Customer-Address')} >
+                    <div className={cx('Customer-Address')} >
                         <div className={cx('Address')}>
                             <div className={cx('title')}>
                                 <div className={cx('title-icon')}>
@@ -246,23 +252,27 @@ const CartDetail = () => {
                                     <p onClick={toggleModal}>Thay đổi</p>
                                 </div>
                             </div>
-                            <div className={cx('Show-Address')}>
-                                <h3>{addressSelected.street}</h3>
-                                <p> {addressSelected.wards.full_name} , huyện {addressSelected.districts.full_name} , {addressSelected.city.full_name} </p>
-                            </div>
+                            {addressSelected ?
+                                <div className={cx('Show-Address')}>
+                                    <h3>{addressSelected?.street}</h3>
+                                    <p> {addressSelected?.wards.full_name} , huyện {addressSelected?.districts.full_name} , {addressSelected?.city.full_name} </p>
+                                </div>
+                                : " Bạn chưa có thông tin"}
                         </div>
                         <div className={cx('Customer')}>
                             <div className={cx('title')}>
                                 <PermIdentityOutlinedIcon className={cx('icon')} />
-                                <p>{addressSelected.name}</p> |
-                                <span>{addressSelected.phone}</span>
+                                {addressSelected ?
+                                    <p>{addressSelected?.name}</p> |
+                                    <span>{addressSelected?.phone}</span>
+                                    : "Bạn chưa có thông tin"}
                             </div>
                             <div className={cx('Show-Address')}>
                                 <p>Ghi chú: Không bắt buộc</p>
                                 <textarea style={{ width: '100%', height: '50px' }} type='text' placeholder='Ví dụ: Hãy ấy ấy cho tôi trước khi giao 15p' />
                             </div>
                         </div>
-                    </div>}
+                    </div>
 
                 </div>
                 <div className={cx('detail-cart-checkkout')}>
@@ -310,10 +320,10 @@ const CartDetail = () => {
                                         <h3>Danh sách địa chỉ của bạn</h3>
                                     </div>
                                     <div className={cx('List-Address')}>
-                                        {customer.Address.map(item => {
+                                        {customer.Address && customer.Address.map(item => {
                                             return (
                                                 <label label key={item._idAddress} htmlFor={item._idAddress} className={cx('Address')} >
-                                                    <input checked={item._idAddress === addressSelected._idAddress} onChange={() => handleAddressChange(item)} type='radio' id={item._idAddress} name='address' />
+                                                    <input checked={addressSelected && item._idAddress === addressSelected._idAddress} onChange={() => handleAddressChange(item)} type='radio' id={item._idAddress} name='address' />
                                                     <div className={cx('inf')}>
                                                         <span>{item.name}</span>
                                                         <span>{item.phone}</span>

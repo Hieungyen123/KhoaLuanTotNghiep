@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import styles from './Nav.module.scss'
 import classNames from "classnames/bind";
 import Menu from '../Menu/Menu';
@@ -9,10 +9,15 @@ import MyContext from '../../contexts/MyContext';
 
 import Cart from '../Cart/Cart';
 
+import empty from '../../IMG/emty-search.png'
+
 // icon 
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import CampaignOutlinedIcon from '@mui/icons-material/CampaignOutlined';
+import ClearIcon from '@mui/icons-material/Clear';
+import axios from 'axios';
 const Nav = () => {
 
 
@@ -21,11 +26,49 @@ const Nav = () => {
     const Context = useContext(MyContext);
     const cx = classNames.bind(styles)
 
+    const [openSearch, setOpenSearch] = useState(false)
+    const [valueSeacrch, setValueSeacrch] = useState('')
+    const [resultSearch, setResultSearch] = useState([])
 
     const HandleCart = () => {
         setOpen(!open)
-
     }
+    console.log('resultSearch', resultSearch)
+    const GetProductSearch = useCallback(
+        () => {
+
+            if (valueSeacrch !== "") {
+
+                try {
+                    axios.get('/api/customer/products/searchTop3/' + valueSeacrch).then((res) => {
+                        // console.log("Calling API with input value:", valueSeacrch);
+                        const result = res.data;
+                        setResultSearch(result)
+
+                    })
+
+                } catch (error) {
+                    // Xử lý lỗi nếu có
+                    console.error(error);
+                }
+            }
+
+        },
+        [valueSeacrch]
+    );
+
+    useEffect(() => {
+        setOpenSearch(true)
+        const timerId = setTimeout(() => {
+            GetProductSearch();
+        }, 2000);
+
+        return () => {
+            clearTimeout(timerId);
+        };
+    }, [GetProductSearch, valueSeacrch]);
+
+
 
     return (
         <div className={cx("Nav")}>
@@ -67,8 +110,37 @@ const Nav = () => {
                         <div></div>
 
                         <div className={cx("Input")} >
-                            <input type="text" />
+                            <input type="text" value={valueSeacrch} onChange={(e) => setValueSeacrch(e.target.value)} />
+
                             <SearchOutlinedIcon className={cx("icon-search")}></SearchOutlinedIcon>
+
+
+                            {openSearch && valueSeacrch !== "" ?
+                                <div className={cx("Input-search-result")}>
+                                    <div className={cx("Input-search-result-title")}>
+                                        <p>Tìm kiếm theo {valueSeacrch} </p>
+                                        <ClearIcon onClick={() => setValueSeacrch("")} className={cx("icon-clear")}></ClearIcon>
+                                    </div>
+                                    <div className={cx("Input-search-result-List")}>
+                                        {resultSearch.length > 0 ? resultSearch?.map(item => {
+                                            return (
+                                                <div key={item._id} className={cx("item")}>
+                                                    <img src={item.image.path} alt="" />
+                                                    <div className={cx("item-inf")}>
+                                                        <p>{item.name}</p>
+                                                        <p><strong>{item.price}.000đ</strong></p>
+                                                    </div>
+                                                </div>)
+                                        }) : <div className={cx("Input-search-result-empty")}> không tìm thấy sản phẩm nào hết <img src={empty} alt="" /></div>}
+
+                                    </div>
+
+                                    <Link className={cx("Input-search-result-More")}>
+                                        Xem thêm <KeyboardArrowRightIcon className={cx("icon")} />
+                                    </Link>
+                                </div>
+
+                                : null}
                         </div>
                         <div className={cx("Shopping-cart")} onMouseEnter={() => setOpenCart(true)}
                             onMouseLeave={() => setOpenCart(false)} >

@@ -276,12 +276,16 @@ router.get('/allproducts', async function (req, res) {
   res.json(result);
 });
 
-
+router.get('/products/searchTop3/:keyword', async function (req, res) {
+  const keyword = req.params.keyword;
+  console.log(keyword)
+  var products = await ProductDAO.selectByKeywordInputSearch(keyword);
+  res.json(products);
+});
 router.get('/products/search/:keyword', async function (req, res) {
   const keyword = req.params.keyword;
   var products = await ProductDAO.selectByKeyword(keyword);
   const categories = await CategoryDAO.selectAll();
-
   const sizePage = 8;
   const noPages = Math.ceil(products.length / sizePage);
   var curPage = 1;
