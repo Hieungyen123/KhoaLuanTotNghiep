@@ -242,165 +242,167 @@ const CartDetail = () => {
                         }
                     </div>
                     <div className={cx('Customer-Address')} >
-                    {customer?.Address.length > 0 && addressSelected ?  <div className={cx('Customer-Address')} >
-                        <div className={cx('Address')}>
-                            <div className={cx('title')}>
-                                <div className={cx('title-icon')}>
-                                    <PersonPinCircleOutlinedIcon className={cx('icon')} />
-                                    <h3>Địa chỉ giao hàng</h3>
-                                </div>
-                                <div className={cx('Choose-Address')}>
-                                    <p onClick={toggleModal}>Thay đổi</p>
-                                </div>
-                            </div>
-                            {addressSelected ?
-                                <div className={cx('Show-Address')}>
-                                    <h3>{addressSelected?.street}</h3>
-                                    <p> {addressSelected?.wards.full_name} , huyện {addressSelected?.districts.full_name} , {addressSelected?.city.full_name} </p>
-                                </div>
-                                : " Bạn chưa có thông tin"}
-                            <div className={cx('Show-Address')}>
-                                <h3>{addressSelected?.street}</h3>
-                                <p> {addressSelected?.wards.full_name} , huyện {addressSelected?.districts.full_name} , {addressSelected?.city.full_name} </p>
-                            </div>
-                        </div>
-                        <div className={cx('Customer')}>
-                            <div className={cx('title')}>
-                                <PermIdentityOutlinedIcon className={cx('icon')} />
-                                {addressSelected ?
-                                    <p>{addressSelected?.name}</p> |
-                                    <span>{addressSelected?.phone}</span>
-                                    : "Bạn chưa có thông tin"}
-                                <p>{addressSelected?.name}</p> |
-                                <span>{addressSelected?.phone}</span>
-                            </div>
-                            <div className={cx('Show-Address')}>
-                                <p>Ghi chú: Không bắt buộc</p>
-                                <textarea style={{ width: '100%', height: '50px' }} type='text' placeholder='Ví dụ: Hãy ấy ấy cho tôi trước khi giao 15p' />
-                            </div>
-                        </div>
-                    </div>
-                    </div> : null}
-
-                </div>
-                <div className={cx('detail-cart-checkkout')}>
-                    <div className={cx('detail-cart-checkkout-content')}>
-                        <div className={cx('detail-cart-checkkout-content-item')}>
-                            <div className={cx('item')}>
-                                <p>Tổng tiền:</p>
-                                <p>{total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}.000 VNĐ</p>
-                            </div>
-                        </div>
-                        <div className={cx('detail-cart-checkkout-content-item')}>
-                            <div className={cx('item')}>
-                                <p>Giảm giá trực tiếp:</p>
-                                <p>{(total - totalDiscount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}.000 VNĐ</p>
-                            </div>
-                        </div>
-                        <div className={cx('detail-cart-checkkout-content-item')}>
-                            <div className={cx('item')}>
-                                <p>Tiết kiệm được:</p>
-                                <p>{(total - totalDiscount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}.000 VNĐ</p>
-                            </div>
-                        </div>
-                        <div className={cx('detail-cart-checkkout-content-item-checkout')}>
-                            <div className={cx('total')}>
-                                <p>Tạm tính:</p>
-                                <p>{finalTotal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}.000 VNĐ</p>
-                            </div>
-
-                            <div className={cx('btn-checkout')}>
-                                <button onClick={toggleModalPaymentMethod} >Tính tiền</button>
-                                <p>Bằng việc tiến hành đặt mua hàng, bạn đồng ý với
-                                    Điều khoản dịch vụ, Chính sách thu thập và xử lý dữ liệu cá nhân</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className={cx('detail-cart-checkkout-SVG')}>{SVG.checkkout}</div>
-                </div>
-                {
-                    modal && (
-                        <div className={cx('modal')}>
-                            <div onClick={toggleModal} className={cx('overlay')}></div>
-                            <div className={cx('modal-content')}>
-                                <div className={cx('modal-items')}>
+                        {customer?.Address.length > 0 && addressSelected ?
+                            <div className={cx('Customer-Address')} >
+                                <div className={cx('Address')}>
                                     <div className={cx('title')}>
-                                        <h3>Danh sách địa chỉ của bạn</h3>
+                                        <div className={cx('title-icon')}>
+                                            <PersonPinCircleOutlinedIcon className={cx('icon')} />
+                                            <h3>Địa chỉ giao hàng</h3>
+                                        </div>
+                                        <div className={cx('Choose-Address')}>
+                                            <p onClick={toggleModal}>Thay đổi</p>
+                                        </div>
                                     </div>
-                                    <div className={cx('List-Address')}>
-                                        {customer.Address && customer.Address.map(item => {
-                                            return (
-                                                <label label key={item._idAddress} htmlFor={item._idAddress} className={cx('Address')} >
-                                                    <input checked={addressSelected && item._idAddress === addressSelected._idAddress} onChange={() => handleAddressChange(item)} type='radio' id={item._idAddress} name='address' />
-                                                    <div className={cx('inf')}>
-                                                        <span>{item.name}</span>
-                                                        <span>{item.phone}</span>
-                                                        <p>{item.street},  {item.wards.full_name} , huyện {item.districts.full_name} , {item.city.full_name} </p>
-                                                    </div>
-                                                </label>
-                                            )
-                                        })}
-
-
-
-                                    </div>
-                                    <div className={cx('More-adress')}>
-                                        <button onClick={() => handleSaveAddressLocalStorage()}>Lưu</button>
-                                        <Link><h4>Thêm địa chỉ mới</h4></Link>
+                                    {addressSelected ?
+                                        <div className={cx('Show-Address')}>
+                                            <h3>{addressSelected?.street}</h3>
+                                            <p> {addressSelected?.wards.full_name} , huyện {addressSelected?.districts.full_name} , {addressSelected?.city.full_name} </p>
+                                        </div>
+                                        : " Bạn chưa có thông tin"}
+                                    <div className={cx('Show-Address')}>
+                                        <h3>{addressSelected?.street}</h3>
+                                        <p> {addressSelected?.wards.full_name} , huyện {addressSelected?.districts.full_name} , {addressSelected?.city.full_name} </p>
                                     </div>
                                 </div>
-
-                                <div className={cx('close-modal')} >
-                                    <CancelOutlinedIcon onClick={toggleModal} className={cx('icon-close')} />
-                                </div>
-                            </div>
-                        </div>
-
-                    )
-                }
-                {
-                    modalPaymentMethod && (
-                        <div className={cx('modal2')}>
-                            <div onClick={toggleModalPaymentMethod} className={cx('overlay2')}></div>
-                            <div className={cx('modal-content2')}>
-                                <div className={cx('modal-items2')}>
+                                <div className={cx('Customer')}>
                                     <div className={cx('title')}>
-                                        <h3>Hãy chọn phương thức thanh toán của bạn.</h3>
+                                        <PermIdentityOutlinedIcon className={cx('icon')} />
+                                        {addressSelected ?
+                                            <p>{addressSelected?.name}</p> |
+                                            <span>{addressSelected?.phone}</span>
+                                            : "Bạn chưa có thông tin"}
+                                        <p>{addressSelected?.name}</p> |
+                                        <span>{addressSelected?.phone}</span>
                                     </div>
-                                    <div className={cx('PaymentMethods')} >
-                                        <div onClick={() => checkout()} className={cx('PaymentMethod-item')} >
-                                            <img src={cash} alt="" />
-                                            <div>
-                                                <p>Tiền mặt</p>
-                                                <p>Lưu ý: Thanh toán khi nhận hàng.</p>
-                                            </div>
-                                        </div>
-                                        <div onClick={() => checkMoMo()} className={cx('PaymentMethod-item')} >
-                                            <img src={MoMo} alt="" />
-                                            <div>
-                                                <p>Thanh toán MoMo</p>
-                                                <p>Lưu ý: thanh toán bằng app momo trên môi trường test</p>
-                                            </div>
-                                        </div>
-                                        <div onClick={() => checkPayos()} className={cx('PaymentMethod-item')} >
-                                            <img src={VietQR} alt="" />
-                                            <div>
-                                                <p>Thanh toán QR Ngân hàng </p>
-                                                <p>Lưu ý: thanh toán tiền thật, ngân hàng napas</p>
-                                            </div>
-                                        </div>
+                                    <div className={cx('Show-Address')}>
+                                        <p>Ghi chú: Không bắt buộc</p>
+                                        <textarea style={{ width: '100%', height: '50px' }} type='text' placeholder='Ví dụ: Hãy ấy ấy cho tôi trước khi giao 15p' />
                                     </div>
+                                </div>
+                            </div>
+                            : null}
 
+                    </div>
+                    <div className={cx('detail-cart-checkkout')}>
+                        <div className={cx('detail-cart-checkkout-content')}>
+                            <div className={cx('detail-cart-checkkout-content-item')}>
+                                <div className={cx('item')}>
+                                    <p>Tổng tiền:</p>
+                                    <p>{total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}.000 VNĐ</p>
+                                </div>
+                            </div>
+                            <div className={cx('detail-cart-checkkout-content-item')}>
+                                <div className={cx('item')}>
+                                    <p>Giảm giá trực tiếp:</p>
+                                    <p>{(total - totalDiscount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}.000 VNĐ</p>
+                                </div>
+                            </div>
+                            <div className={cx('detail-cart-checkkout-content-item')}>
+                                <div className={cx('item')}>
+                                    <p>Tiết kiệm được:</p>
+                                    <p>{(total - totalDiscount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}.000 VNĐ</p>
+                                </div>
+                            </div>
+                            <div className={cx('detail-cart-checkkout-content-item-checkout')}>
+                                <div className={cx('total')}>
+                                    <p>Tạm tính:</p>
+                                    <p>{finalTotal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}.000 VNĐ</p>
                                 </div>
 
-                                <div className={cx('close-modal')} >
-                                    <CancelOutlinedIcon onClick={toggleModalPaymentMethod} className={cx('icon-close')} />
+                                <div className={cx('btn-checkout')}>
+                                    <button onClick={toggleModalPaymentMethod} >Tính tiền</button>
+                                    <p>Bằng việc tiến hành đặt mua hàng, bạn đồng ý với
+                                        Điều khoản dịch vụ, Chính sách thu thập và xử lý dữ liệu cá nhân</p>
                                 </div>
                             </div>
                         </div>
+                        <div className={cx('detail-cart-checkkout-SVG')}>{SVG.checkkout}</div>
+                    </div>
+                    {
+                        modal && (
+                            <div className={cx('modal')}>
+                                <div onClick={toggleModal} className={cx('overlay')}></div>
+                                <div className={cx('modal-content')}>
+                                    <div className={cx('modal-items')}>
+                                        <div className={cx('title')}>
+                                            <h3>Danh sách địa chỉ của bạn</h3>
+                                        </div>
+                                        <div className={cx('List-Address')}>
+                                            {customer.Address && customer.Address.map(item => {
+                                                return (
+                                                    <label label key={item._idAddress} htmlFor={item._idAddress} className={cx('Address')} >
+                                                        <input checked={addressSelected && item._idAddress === addressSelected._idAddress} onChange={() => handleAddressChange(item)} type='radio' id={item._idAddress} name='address' />
+                                                        <div className={cx('inf')}>
+                                                            <span>{item.name}</span>
+                                                            <span>{item.phone}</span>
+                                                            <p>{item.street},  {item.wards.full_name} , huyện {item.districts.full_name} , {item.city.full_name} </p>
+                                                        </div>
+                                                    </label>
+                                                )
+                                            })}
 
-                    )
-                }
+
+
+                                        </div>
+                                        <div className={cx('More-adress')}>
+                                            <button onClick={() => handleSaveAddressLocalStorage()}>Lưu</button>
+                                            <Link><h4>Thêm địa chỉ mới</h4></Link>
+                                        </div>
+                                    </div>
+
+                                    <div className={cx('close-modal')} >
+                                        <CancelOutlinedIcon onClick={toggleModal} className={cx('icon-close')} />
+                                    </div>
+                                </div>
+                            </div>
+
+                        )
+                    }
+                    {
+                        modalPaymentMethod && (
+                            <div className={cx('modal2')}>
+                                <div onClick={toggleModalPaymentMethod} className={cx('overlay2')}></div>
+                                <div className={cx('modal-content2')}>
+                                    <div className={cx('modal-items2')}>
+                                        <div className={cx('title')}>
+                                            <h3>Hãy chọn phương thức thanh toán của bạn.</h3>
+                                        </div>
+                                        <div className={cx('PaymentMethods')} >
+                                            <div onClick={() => checkout()} className={cx('PaymentMethod-item')} >
+                                                <img src={cash} alt="" />
+                                                <div>
+                                                    <p>Tiền mặt</p>
+                                                    <p>Lưu ý: Thanh toán khi nhận hàng.</p>
+                                                </div>
+                                            </div>
+                                            <div onClick={() => checkMoMo()} className={cx('PaymentMethod-item')} >
+                                                <img src={MoMo} alt="" />
+                                                <div>
+                                                    <p>Thanh toán MoMo</p>
+                                                    <p>Lưu ý: thanh toán bằng app momo trên môi trường test</p>
+                                                </div>
+                                            </div>
+                                            <div onClick={() => checkPayos()} className={cx('PaymentMethod-item')} >
+                                                <img src={VietQR} alt="" />
+                                                <div>
+                                                    <p>Thanh toán QR Ngân hàng </p>
+                                                    <p>Lưu ý: thanh toán tiền thật, ngân hàng napas</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div className={cx('close-modal')} >
+                                        <CancelOutlinedIcon onClick={toggleModalPaymentMethod} className={cx('icon-close')} />
+                                    </div>
+                                </div>
+                            </div>
+
+                        )
+                    }
+                </div >
             </div >
         )
     } else {
