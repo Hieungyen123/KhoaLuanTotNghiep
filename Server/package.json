@@ -6,7 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "(npm install) && (cd ../admin && npm install && npm run build) && (cd ../customer && npm install && npm run build)",
+<<<<<<< HEAD
     "start": "nodemon index.js"
+=======
+    "start": "node index.js"
+>>>>>>> 3eabe9c506e99a456b05c3011b8475afedf3930e
   },
   "author": "",
   "engines": {

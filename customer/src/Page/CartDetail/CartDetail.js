@@ -241,7 +241,11 @@ const CartDetail = () => {
                         })
                         }
                     </div>
+<<<<<<< HEAD
                     <div className={cx('Customer-Address')} >
+=======
+                    {customer?.Address.length > 0 && addressSelected ?  <div className={cx('Customer-Address')} >
+>>>>>>> 3eabe9c506e99a456b05c3011b8475afedf3930e
                         <div className={cx('Address')}>
                             <div className={cx('title')}>
                                 <div className={cx('title-icon')}>
@@ -252,27 +256,43 @@ const CartDetail = () => {
                                     <p onClick={toggleModal}>Thay đổi</p>
                                 </div>
                             </div>
+<<<<<<< HEAD
                             {addressSelected ?
                                 <div className={cx('Show-Address')}>
                                     <h3>{addressSelected?.street}</h3>
                                     <p> {addressSelected?.wards.full_name} , huyện {addressSelected?.districts.full_name} , {addressSelected?.city.full_name} </p>
                                 </div>
                                 : " Bạn chưa có thông tin"}
+=======
+                            <div className={cx('Show-Address')}>
+                                <h3>{addressSelected?.street}</h3>
+                                <p> {addressSelected?.wards.full_name} , huyện {addressSelected?.districts.full_name} , {addressSelected?.city.full_name} </p>
+                            </div>
+>>>>>>> 3eabe9c506e99a456b05c3011b8475afedf3930e
                         </div>
                         <div className={cx('Customer')}>
                             <div className={cx('title')}>
                                 <PermIdentityOutlinedIcon className={cx('icon')} />
+<<<<<<< HEAD
                                 {addressSelected ?
                                     <p>{addressSelected?.name}</p> |
                                     <span>{addressSelected?.phone}</span>
                                     : "Bạn chưa có thông tin"}
+=======
+                                <p>{addressSelected?.name}</p> |
+                                <span>{addressSelected?.phone}</span>
+>>>>>>> 3eabe9c506e99a456b05c3011b8475afedf3930e
                             </div>
                             <div className={cx('Show-Address')}>
                                 <p>Ghi chú: Không bắt buộc</p>
                                 <textarea style={{ width: '100%', height: '50px' }} type='text' placeholder='Ví dụ: Hãy ấy ấy cho tôi trước khi giao 15p' />
                             </div>
                         </div>
+<<<<<<< HEAD
                     </div>
+=======
+                    </div> : null}
+>>>>>>> 3eabe9c506e99a456b05c3011b8475afedf3930e
 
                 </div>
                 <div className={cx('detail-cart-checkkout')}>
