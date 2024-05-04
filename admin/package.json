@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "homepage": "/admin",
   "private": true,
-  "proxy": "http://localhost:3000",
+  "proxy": "https://khoaluantotnghiep.onrender.com",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
