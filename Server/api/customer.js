@@ -6,6 +6,7 @@ const cloudinary = require('cloudinary').v2;
 const querystring = require('querystring');
 
 // daos
+const BlogDao = require('../Models/BlogDao.js')
 const CategoryDAO = require('../Models/CategoryDAO.js');
 const ProductDAO = require('../Models/ProductDao.js');
 const CustomerDAO = require('../Models/customer1DAO.js')
@@ -14,7 +15,7 @@ const CommentDao = require('../Models/commentsDao.js');
 const subcategoriesDao = require('../Models/subcatoriesDao.js')
 const BrandDAO = require('../Models/BrandDao.js')
 const RatingDAO = require('../Models/RatingDao.js')
-const { uploadCloud, uploadCloudSubcate, uploadCloudBrand, uploadCloudProduct, uploadCloudUser } = require('../untils/UploadFileImgCloud.js')
+const { uploadCloud, uploadCloudBlog, uploadCloudSubcate, uploadCloudBrand, uploadCloudProduct, uploadCloudUser } = require('../untils/UploadFileImgCloud.js')
 
 //utils
 const CryptoUtil = require('../untils/CryptoUtil.js');
@@ -25,12 +26,34 @@ const JwtUtil = require('../untils/JwtUnitil.js');
 const PayOS = require("@payos/node");
 const payos = new PayOS("3b7309fb-505c-435a-bfdd-11778dec2258", "39f5d233-c9bb-4f9d-87d7-b843909acc55", "22cb96fec9fb1a9a2e0b1e9ee50672d037c3d00fd08604351c80c777f8c6fa15");
 
+function generateNonRepeatingNumbers(min, max) {
+  const numbers = [];
+
+  // Tạo mảng chứa các số từ min đến max
+  for (let i = min; i <= max; i++) {
+    numbers.push(i);
+  }
+
+  // Xáo trộn mảng sử dụng thuật toán Fisher-Yates
+  for (let i = numbers.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+  }
+
+  // Trả về 4 số ngẫu nhiên từ đầu mảng
+  return numbers.slice(min, max).join(', ');
+}
+
+
+
 //PayOs
 router.post("/paymentpayos", JwtUtil.checkToken, async (req, res) => {
+  // console.log('payos', req.body)
   console.log("payos")
+  const id = generateNonRepeatingNumbers(1, 6)
   const requestData = {
-    orderCode: 234237,
-    amount: 5000,
+    orderCode: parseInt(id),
+    amount: 3000,
     description: "Thanh toan don hang",
     items: [
       {
@@ -39,8 +62,8 @@ router.post("/paymentpayos", JwtUtil.checkToken, async (req, res) => {
         price: 1000,
       }
     ],
-    cancelUrl: "https://khoaluantotnghiep.onrender.com/home",
-    returnUrl: "https://khoaluantotnghiep.onrender.com/done-checkout"
+    cancelUrl: "https://khoaluantotnghiep.onrender.com//home",
+    returnUrl: "https://khoaluantotnghiep.onrender.com//done-checkout"
   };
   const paymentLinkData = await payos.createPaymentLink(requestData);
   res.json({ url: paymentLinkData })
@@ -50,24 +73,23 @@ router.post("/paymentpayos", JwtUtil.checkToken, async (req, res) => {
 
 //MoMo
 router.post("/paymentmomo", JwtUtil.checkToken, async (req, res) => {
-  console.log(req.body)
+  console.log('momo', req.body)
   var partnerCode = "MOMO";
   var accessKey = "F8BBA842ECF85";
   var secretkey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
   var requestId = partnerCode + new Date().getTime();
   var orderId = requestId;
   var orderInfo = "pay with MoMo";
-  var redirectUrl = "https://khoaluantotnghiep.onrender.com/done-checkout";
+  var redirectUrl = "https://khoaluantotnghiep.onrender.com//done-checkout";
   var ipnUrl = "https://callback.url/notify";
   // var ipnUrl = redirectUrl = "https://webhook.site/454e7b77-f177-4ece-8236-ddf1c26ba7f8";
-  var amount = "50000";
+  var amount = req.body.total * 1000;
   var requestType = "captureWallet"
   var extraData = "" //pass empty value if your merchant does not have stores
-  const extraDataEncoded = encodeExtraData(extraData);
 
   //before sign HMAC SHA256 with format
   //accessKey=$accessKey&amount=$amount&extraData=$extraData&ipnUrl=$ipnUrl&orderId=$orderId&orderInfo=$orderInfo&partnerCode=$partnerCode&redirectUrl=$redirectUrl&requestId=$requestId&requestType=$requestType
-  var rawSignature = "accessKey=" + accessKey + "&amount=" + amount + "&extraData=" + extraDataEncoded + "&ipnUrl=" + ipnUrl + "&orderId=" + orderId + "&orderInfo=" + orderInfo + "&partnerCode=" + partnerCode + "&redirectUrl=" + redirectUrl + "&requestId=" + requestId + "&requestType=" + requestType
+  var rawSignature = "accessKey=" + accessKey + "&amount=" + amount + "&extraData=" + extraData + "&ipnUrl=" + ipnUrl + "&orderId=" + orderId + "&orderInfo=" + orderInfo + "&partnerCode=" + partnerCode + "&redirectUrl=" + redirectUrl + "&requestId=" + requestId + "&requestType=" + requestType
   //puts raw signature
   console.log("--------------------RAW SIGNATURE----------------")
   console.log(rawSignature)
@@ -149,7 +171,7 @@ router.get('/categories', async function (req, res) {
 
 
 // subcategory
-router.get('/subcategories', async function (req, res) {
+router.get('/subcategories/', async function (req, res) {
   const subcategories = await subcategoriesDao.selectAll();
   res.json(subcategories);
 });
@@ -176,6 +198,7 @@ router.get('/products/new', async function (req, res) {
 });
 router.get('/products', async function (req, res) {
   const products = await ProductDAO.selectAll();
+
   const filteredProducts = products.map(product => {
     const { _id, name, price, quantity, image, Brand, SubCategory, promotion, description } = product;
     return { _id, name, price, quantity, image, Brand, SubCategory, promotion, description };
@@ -185,11 +208,25 @@ router.get('/products', async function (req, res) {
 router.get('/products/hot/:cid', async function (req, res) {
   const _cid = req.params.cid;
   console.log(_cid)
-  const products = await ProductDAO.selectTopHot(4, _cid);
-  // console.log(products)
-  res.json(products);
-});
 
+  const products = await ProductDAO.selectTopHot(4, _cid);
+  const filteredProducts = products.map(product => {
+    const { _id, name, price, quantity, image, Brand, SubCategory, promotion, description } = product;
+    return { _id, name, price, quantity, image, Brand, SubCategory, promotion, description };
+  });
+  // console.log(products)
+  res.json(filteredProducts);
+});
+router.get('/products/hot10', async function (req, res) {
+  console.log('chayk hot product')
+  const products = await ProductDAO.selectTopHot10(10);
+  const filteredProducts = products.map(product => {
+    const { _id, name, price, quantity, image, Brand, SubCategory, promotion, description } = product;
+    return { _id, name, price, quantity, image, Brand, SubCategory, promotion, description };
+  });
+  console.log(filteredProducts)
+  res.json(filteredProducts);
+});
 router.get('/products/category/:cid', async function (req, res) {
   const _cid = req.params.cid;
   const subcategories = await subcategoriesDao.selectByIDCategory(_cid);
@@ -374,7 +411,29 @@ router.post('/signup', async function (req, res) {
     }
   };
 });
-
+router.post('/signup-google', async function (req, res) {
+  console.log(req.body)
+  const username = req.body.username;
+  const email = req.body.email;
+  const image = req.body.image;
+  const accessToken = req.body.token;
+  const dbCust = await CustomerDAO.selectByEmail(email);
+  if (dbCust) {
+    if (!accessToken) {
+      return res.status(401).json({ success: false, message: 'Access Token is required' });
+    }
+    const token = JwtUtil.genToken(dbCust._id.toString());
+    const refreshtoken = JwtUtil.genRefreshToken(dbCust._id.toString());
+    res.json({ success: true, data: dbCust, token: token, refreshtoken: refreshtoken });
+  } else {
+    const newCust = { image: { imageUrl: image }, username: username, password: "", email: email, active: 1, role: 0, Gender: 'chưa có thông tin', Address: [] };
+    const result = await CustomerDAO.insert(newCust);
+    const user = await CustomerDAO.selectByEmail(email);
+    const token = JwtUtil.genToken(user._id.toString());
+    const refreshtoken = JwtUtil.genRefreshToken(user._id.toString());
+    return res.json({ success: true, data: user, token: token, refreshtoken: refreshtoken });
+  };
+});
 //active account
 router.post('/active', async function (req, res) {
   console.log(req.body)
@@ -435,7 +494,7 @@ router.get('/user:id', JwtUtil.checkToken, async (req, res) => {
 
 router.post('/refreshtoken', (req, res) => {
   const RefreshToken = req.body.refreshToken;
-  // console.log('check', RefreshToken)
+  console.log('check', RefreshToken)
 
   if (RefreshToken == null) {
     return res.sendStatus(401); // Unauthorized
@@ -449,7 +508,7 @@ router.post('/refreshtoken', (req, res) => {
     const newRefreshToken = JwtUtil.genRefreshToken(user.id);
     const customer = await CustomerDAO.selectByID(user.id)
 
-    console.log(customer);
+    // console.log(customer);
     res.json({ accessToken: accessToken, newRefreshToken: newRefreshToken, customer: customer });
   });
 });
@@ -468,31 +527,32 @@ router.put('/customers/myprofile/profile/:id', JwtUtil.checkToken, async functio
   res.json(result);
 });
 
-router.post('/checkout', JwtUtil.checkToken, async function (req, res) {
+router.post('/checkout', async function (req, res) {
   const now = new Date().getTime(); // milliseconds
   const total = req.body.total;
+  const UserID = req.body.UserID;
+  const orderType = req.body.orderType;
+  const note = req.body.note;
+  const orderId = req.body.orderId;
   const items = req.body.items;
-  const customer = req.body.customer;
-  const address = req.body.address
-  const order = { cdate: now, total: total, status: 'PENDING', customer: customer, items: items, Address: address };
+  const address = req.body.Address
+  const order = { orderId: orderId, note: note, orderType: orderType, cdate: now, total: total, status: 'PENDING', UserID: UserID, items: items, Address: address };
   const result = await OrderDAO.insert(order);
-  res.json(result);
+  res.json({ success: true, message: 'Đơn hàng đã được lưu thành công' });
 });
 router.get('/orders/customer/:cid', JwtUtil.checkToken, async function (req, res) {
   const _cid = req.params.cid;
+  console.log(_cid)
   var orders = await OrderDAO.selectByCustID(_cid);
-
-  const sizePage = 4;
-  const noPages = Math.ceil(orders.length / sizePage);
-  var curPage = 1;
-  if (req.query.page)
-    curPage = parseInt(req.query.page);
-  const offset = (curPage - 1) * sizePage;
-  orders = orders.slice(offset, offset + sizePage);
-  const result = { orders: orders, noPages: noPages, curPage: curPage };
-  res.json(result);
+  res.json(orders);
 });
+router.post('/orders/customer/:cid', JwtUtil.checkToken, async function (req, res) {
+  console.log('chạy cancel')
+  const cid = req.params.cid;
+  var orders = await OrderDAO.update(cid, 'Cancel');
 
+  res.json(orders);
+});
 
 
 router.put('/customers/:id', JwtUtil.checkToken, uploadCloudUser.single('file'), async function (req, res) {
@@ -564,5 +624,53 @@ router.put('/customers/address/:id', JwtUtil.checkToken, uploadCloudUser.single(
   const result = await CustomerDAO.PutUpdateAddress(newCust, _idcustomer, idAddress);
   res.json({ success: true, message: result });
 });
+
+
+
+router.post('/blog', JwtUtil.checkToken, uploadCloudBlog.single('file'), async function (req, res) {
+  const body = req.body
+
+  // console.log(body)
+  const user = JSON.parse(body.customer)
+  const value = body.value
+  const valueTitle = body.valueTitle
+  const valueShortIntro = body.valueShortIntro
+  const now = new Date().getTime(); // milliseconds
+  try {
+    if (req.file) {
+      const image = req.file
+      const newBlog = { image: image, valueContent: value, valueTitle: valueTitle, valueShortIntro: valueShortIntro, crdate: now, customer: user }
+      const result = await BlogDao.insert(newBlog);
+      res.json({ success: true, message: result });
+    }
+
+  } catch (err) {
+    if (req.file) {
+      cloudinary.uploader.destroy(req.file.filename)
+      res.json({ success: false, message: 'lỗi rồi' });
+    }
+  }
+
+});
+router.get('/blog', async function (req, res) {
+  console.log('chạy')
+  const result = await BlogDao.selectAll();
+  res.json(result);
+
+})
+router.get('/blog/:cid', JwtUtil.checkToken, async function (req, res) {
+  const _idcustomer = req.params.cid;
+  console.log(_idcustomer)
+  const result = await BlogDao.selectByID(_idcustomer);
+  res.json(result);
+
+})
+router.get('/blogdetail/:id', async function (req, res) {
+  const idblog = req.params.id;
+  const result = await BlogDao.selectOneByID(idblog);
+  res.json(result);
+
+})
+
 
 module.exports = router;
