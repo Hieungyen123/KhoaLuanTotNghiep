@@ -52,11 +52,20 @@ const storageProducts = new CloudinaryStorage({
         transformation: [{ width: 400, height: 400, }],
     }
 });
+const storageBlog = new CloudinaryStorage({
+    cloudinary,
+    allowedFormats: ['jpeg', 'jpg', 'png', 'webp'],
+    params: {
+        folder: 'Blogs-Image',
+        transformation: [{ width: 400, height: 400, }],
+    }
+});
 
 const uploadCloud = multer({ storage: storage });
 const uploadCloudSubcate = multer({ storage: storageSubcate });
 const uploadCloudBrand = multer({ storage: storageBrand });
 const uploadCloudUser = multer({ storage: storageUser });
 const uploadCloudProduct = multer({ storage: storageProducts });
+const uploadCloudBlog = multer({ storage: storageBlog });
 
-module.exports = { uploadCloud, uploadCloudSubcate, uploadCloudBrand, uploadCloudUser, uploadCloudProduct };
+module.exports = { uploadCloud, uploadCloudSubcate, uploadCloudBrand, uploadCloudUser, uploadCloudProduct, uploadCloudBlog };
