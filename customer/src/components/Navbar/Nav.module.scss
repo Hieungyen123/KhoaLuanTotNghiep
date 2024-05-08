@@ -1,0 +1,302 @@
+.Nav {
+  justify-content: center;
+  width: 100%;
+  display: flex;
+  gap: 60px;
+  position: relative;
+  height: 80px;
+  align-items: center;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  z-index: 200;
+  height: 110px;
+  padding: 10px;
+  // background-color: #71b8db;
+  background: url("../../IMG/background.jpg");
+  background-size: cover;
+}
+.Content {
+  padding: 10px;
+  justify-content: center;
+  width: 100%;
+  display: flex;
+  position: relative;
+  // height: 50px;
+  align-items: center;
+  color: white;
+  z-index: 200;
+  flex-direction: column;
+  gap: 10px;
+  .Top {
+    .Left {
+      width: 100%;
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      height: 100%;
+      img {
+        height: 30px;
+      }
+    }
+    .Right {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      .Search {
+        display: flex;
+        align-items: center;
+        .icon {
+          width: 30px;
+          height: 30px;
+          padding: 5px;
+          &:hover {
+            background-color: var(--Light-Blue);
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+          }
+        }
+      }
+
+      .Info {
+        display: flex;
+        gap: 10px;
+        width: 200px;
+        // align-items: center;
+        justify-content: center;
+        a {
+          font-weight: 500;
+          color: var(--Light-Gray);
+        }
+        a {
+          &:hover {
+            color: var(--Gray);
+          }
+        }
+        .user-bar {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+          }
+        }
+        .center {
+          width: 1px;
+          // height: 100%;
+          background-color: rgb(184, 181, 181);
+        }
+      }
+    }
+  }
+  .Bottom {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .Input {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 500px;
+      background-color: white;
+      padding-left: 10px;
+      height: 40px;
+      border-radius: 30px;
+      position: relative;
+      input {
+        margin: 0;
+        font-size: 16px;
+        height: 70%;
+        // border-radius: 30px;
+        width: 90%;
+        border: none !important;
+        outline: none !important;
+      }
+      .Input-search-result {
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        position: absolute;
+        top: 45px;
+        width: 100%;
+        max-height: 400px;
+        min-height: 200px;
+        background-color: white;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        // padding: 10px;
+        .Input-search-result-title {
+          padding: 10px;
+          color: black;
+          border-bottom: 1px solid #e5e7eb;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          .icon-clear {
+            cursor: pointer;
+          }
+        }
+        .Input-search-result-List {
+          color: black;
+          display: flex;
+          flex-direction: column;
+          // gap: 10px;
+          .item {
+            padding: 10px;
+            &:hover {
+              background-color: #e5e7eb;
+              cursor: pointer;
+            }
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            p {
+              font-weight: 500;
+            }
+            img {
+              background-color: white;
+              width: 100px;
+              height: 80px;
+              object-fit: contain;
+              border-radius: 10px;
+              padding: 10px;
+            }
+          }
+          .Input-search-result-empty {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            img {
+              width: 200px;
+              object-fit: contain;
+            }
+          }
+        }
+        .Input-search-result-More {
+          height: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #1250dc;
+          &:hover {
+            background-color: #e5e7eb;
+          }
+        }
+      }
+      .icon-search {
+        &:hover {
+          opacity: 1;
+          cursor: pointer;
+        }
+        opacity: 0.9;
+        color: white;
+        width: 30px;
+        height: 30px;
+        padding: 4px;
+        border-radius: 50%;
+        border: 0 solid #e5e7eb;
+        background-color: #5680e9;
+      }
+    }
+    .Shopping-cart {
+      .icon {
+        padding: 5px;
+        border-radius: 50%;
+        font-size: 35px;
+
+        &:hover {
+          cursor: pointer;
+          color: var(--MainColor) !important;
+          background-color: white;
+        }
+      }
+      position: relative;
+      .lengthCart {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 0;
+        background-color: #fa8c16;
+        color: white;
+        text-align: center;
+        right: -5px;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        font-size: 12px;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+@media (max-width: 700px) {
+  .Content {
+    .Bottom {
+      .Input {
+        padding: 0;
+        input {
+          padding: 10px;
+        }
+      }
+    }
+  }
+}
+@media (max-width: 500px) {
+  .Content {
+    .Bottom {
+      .Input {
+        padding: 0;
+        height: 35px;
+        justify-content: space-around;
+        .icon-search {
+          width: 25px;
+          height: 25px;
+        }
+        input {
+          padding: 10px;
+
+          width: 80%;
+        }
+      }
+    }
+  }
+}
+@media (max-width: 400px) {
+  .Content {
+    .Top {
+      justify-content: space-between;
+      .Left {
+        img {
+          height: 20px;
+        }
+      }
+      .Right {
+        .Info {
+          font-size: 13px;
+          justify-content: end;
+          .user-bar {
+            p {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+    .Bottom {
+      gap: 10px;
+      .Shopping-cart {
+        .icon {
+          font-size: 30px;
+        }
+        .lengthCart {
+          width: 15px;
+          height: 15px;
+        }
+      }
+    }
+  }
+}

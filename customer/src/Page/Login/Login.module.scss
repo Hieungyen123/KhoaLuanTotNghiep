@@ -1,0 +1,84 @@
+.Login {
+  background-color: #c9d6ff;
+  background: linear-gradient(to right, #e2e2e2, #c9d6ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  .Model {
+    // background-color: #fff;
+    border-radius: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+    position: relative;
+    overflow: hidden;
+    width: 768px;
+    max-width: 100%;
+    min-height: 600px;
+    gap: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+
+    .Icon-Home {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      padding: 6px;
+      font-size: 25px;
+      border: 2px solid #aeb8d8;
+      border-radius: 10%;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 3px;
+      width: 38px;
+      height: 38px;
+      color: #333;
+      transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+      box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+        rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+      &:hover {
+        cursor: pointer;
+        transform: translateY(-5px);
+      }
+    }
+    .Logo {
+      padding: 10px 15px;
+      width: 25%;
+    }
+    .Login-Content {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1;
+      gap: 15px;
+      align-items: center;
+      a {
+        font-weight: 500;
+        color: #333;
+        font-size: 13px;
+        text-decoration: none;
+        margin: 15px 0 10px;
+      }
+      button {
+        background-color: #512da8;
+        color: #fff;
+        font-size: 12px;
+        padding: 10px 45px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        margin-top: 10px;
+        cursor: pointer;
+      }
+      input {
+        border: none;
+        margin-top: 10px;
+      }
+    }
+  }
+}

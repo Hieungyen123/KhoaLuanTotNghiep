@@ -1,0 +1,56 @@
+.DoneChecKout {
+  height: 100vh;
+  display: flex;
+  width: 100%;
+  max-height: 700px;
+  align-items: center;
+  // justify-content: center;
+  margin-top: 20px;
+  flex-direction: column;
+  gap: 20px;
+  .Content-Success {
+    border-top: 5px solid rgb(70, 232, 108);
+    width: 500px;
+    height: 500px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    // justify-content: space-around;
+    gap: 30px;
+    font-weight: 500;
+
+    .Content-Success-icon {
+      padding: 10px;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      color: white;
+      background-color: rgb(70, 232, 108);
+      margin-top: 20px;
+    }
+    .Content-Success-title,
+    .Content-Success-info,
+    .Content-Success-payment {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      width: 100%;
+      p {
+        color: rgb(176, 175, 175);
+        font-size: 14px;
+      }
+    }
+  }
+  .Back-Button {
+    width: 250px;
+    height: 40px;
+    background-color: #527ee5;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+  }
+}

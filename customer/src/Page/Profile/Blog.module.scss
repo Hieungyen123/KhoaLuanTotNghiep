@@ -1,0 +1,40 @@
+.MyBlog {
+  width: 100%;
+  height: auto;
+  background-color: white;
+  img {
+    width: 100%;
+    object-fit: contain;
+  }
+  .MyBlog-title {
+    width: 100%;
+    height: 50px;
+    padding: 10px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    button {
+      padding: 8px 12px;
+      background-color: #1250dc;
+      color: white;
+      font-weight: 500;
+      outline: none;
+      border: none;
+      border-radius: 5px;
+      opacity: 0.9;
+      &:hover {
+        opacity: 1;
+        cursor: pointer;
+      }
+    }
+  }
+  .MyBlog-content {
+    padding: 10px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-x: auto;
+  }
+}
