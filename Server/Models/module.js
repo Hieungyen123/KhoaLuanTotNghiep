@@ -92,7 +92,9 @@ const OrderSchema = mongoose.Schema({
   total: Number,
   status: String,
   UserID: String,
+  orderType: String,
   items: [ItemSchema],
+  orderId: String,
   Address: {
     name: String,
     phone: Number,
@@ -102,7 +104,9 @@ const OrderSchema = mongoose.Schema({
     street: String,
     note: String
   },
-  ShippingMethod: String
+  ShippingMethod: String,
+  note: String
+
 }, { versionKey: false });
 const CommentsSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
@@ -110,6 +114,16 @@ const CommentsSchema = mongoose.Schema({
   customer: CustomerSchema,
   value: String,
   cdate: Number,
+
+}, { versionKey: false });
+const BlogSchema = mongoose.Schema({
+  _id: mongoose.Schema.Types.ObjectId,
+  image: Object,
+  valueContent: String,
+  valueTitle: String,
+  valueShortIntro: String,
+  crdate: Date,
+  customer: CustomerSchema,
 
 }, { versionKey: false });
 
@@ -142,5 +156,6 @@ const Models = {
   Brand: mongoose.models.Brand || mongoose.model('Brand', BrandSchema),
   SubCategory: mongoose.models.SubCategory || mongoose.model('SubCategory', SubCategorySchema),
   CustomerCartHistory: mongoose.models.CustomerCartHistory || mongoose.model('CustomerCartHistory', CustomerCartHistorySchema),
+  Blog: mongoose.models.Blog || mongoose.model('BlogSchema', BlogSchema),
 };
 module.exports = Models;
